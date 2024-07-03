@@ -1,0 +1,19 @@
+<div class="mx-auto md:w-2/3 w-full flex mt-4 mb-4">
+  <div class="mx-auto">
+    <% if notice.present? %>
+      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+    <% end %>
+     <h1 class="text-3xl font-bold text-center mb-8 mt-8 text-white">Booking #<%= @booking.id %></h1>
+
+
+    <%= render @booking %>
+
+    <%= link_to "Back to bookings", bookings_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+
+    <% if @booking.status != 'cancelled' %>
+      <div class="inline-block ml-2">
+        <%= link_to "Cancel this booking", cancel_booking_path(@booking), method: :patch, data: { confirm: "Are you sure you want to cancel this booking?" }, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+      </div>
+    <% end %>
+  </div>
+</div>

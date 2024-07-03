@@ -1,0 +1,28 @@
+<div id="<%= dom_id user %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">First Name:</strong>
+    <%= user.first_name %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Last Name:</strong>
+    <%= user.last_name %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Mobile Number:</strong>
+    <%= user.mobile_number %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Administrator Privilege:</strong>
+    <%= user.admin %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this user", [:admin, user], class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to "Edit this user", edit_admin_user_path(user), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <hr class="mt-6">
+  <% end %>
+
+</div>

@@ -1,0 +1,92 @@
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-8">
+  <div class="bg-white shadow-md rounded-lg overflow-hidden">
+    <div class="p-6">
+
+      <h2 class="text-3xl font-bold mb-2"><%= @hotel.name %></h2>
+      <p class="text-gray-600 mb-4"><%= @hotel.location %></p>
+      <p class="text-gray-700 mb-6"><%= @hotel.description %></p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="col-span-1">
+          <h3 class="text-lg font-semibold mb-2">Room Prices</h3>
+          <div class="text-gray-700">
+            <p>Single Room: $<%= @hotel.single_room_price %></p>
+            <p>Double Room: $<%= @hotel.double_room_price %></p>
+            <p>Suite: $<%= @hotel.suite_price %></p>
+          </div>
+        </div>
+
+        <% if @hotel.amenities.present? %>
+          <div class="col-span-1">
+            <h3 class="text-lg font-semibold mb-2">Amenities</h3>
+            <ul class="text-gray-700">
+              <% @hotel.amenities.split(',').each do |amenity| %>
+                <li><%= amenity.strip %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="col-span-1">
+          <h3 class="text-lg font-semibold mb-2">Contact Details</h3>
+          <ul class="text-gray-700">
+            <li><%= @hotel.contact_details %></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="my-5">
+        <h3 class="text-lg font-semibold mb-2">Photo Gallery</h3>
+        
+        <% if @hotel.images.any? %>
+          <div class="flex flex-wrap gap-4">
+            <% @hotel.images.each do |image| %>
+              <%= image_tag image.variant(resize: "300x300"), class: "rounded-md border border-gray-300 shadow" %>
+            <% end %>
+          </div>
+        <% else %>    
+          <p>No photos yet.</p>
+        <% end %>
+      </div>
+
+      <div class="my-5">
+  <h3 class="text-lg font-semibold mb-2">Reviews</h3>
+
+  <% if @hotel.reviews.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <% @hotel.reviews.each do |review| %>
+        <div class="bg-gray-100 rounded-lg p-4">
+          <p><%= review.content %></p>
+          <div class="flex items-center mt-2">
+            <span class="text-gray-600 mr-2">Rating:</span>
+            <% review.rating.times do %>
+              <svg class="h-5 w-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 0l2.37 6.08 6.29.48c.83.06 1.18 1.13.56 1.69l-4.83 4.25 1.43 6.1c.19.81-.61 1.46-1.29 1.04L10 15.4l-5.04 3.13c-.68.42-1.48-.23-1.29-1.04l1.43-6.1-4.83-4.25c-.62-.55-.27-1.63.56-1.69l6.29-.48L10 0z" clip-rule="evenodd"/>
+              </svg>
+            <% end %>
+          </div>
+          <p class="text-gray-600 mt-1">By: <%= review.user.first_name %> <%= review.user.last_name %> | <%= time_ago_in_words(review.created_at) %> ago</p>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p>No reviews yet.</p>
+  <% end %>
+</div>
+
+
+      <div class="flex justify-between items-center mt-6">
+        <%= link_to "Back to Hotels", hotels_path, class: "text-blue-500 hover:underline" %>
+        <div class="flex space-x-4">
+          <% if logged_in? %>
+            <%= link_to "Leave a Review", new_hotel_review_path(@hotel), class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" %>
+          <% end %>
+          <%= link_to "Book Now", new_booking_path(hotel_id: @hotel.id), class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

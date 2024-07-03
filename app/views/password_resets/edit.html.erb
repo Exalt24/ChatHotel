@@ -1,0 +1,43 @@
+<% if flash[:success] %>
+  <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 mt-4 ml-4 mr-4" role="alert">
+    <span class="block sm:inline"><%= flash[:success] %></span>
+  </div>
+<% elsif flash[:error] %>
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 mt-4 ml-4 mr-4" role="alert">
+    <span class="block sm:inline"><%= flash[:error] %></span>
+  </div>
+<% end %>
+
+<% if @user && @user.errors.any? %>
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 mt-4 ml-4 mr-4" role="alert">
+    <h2 class="font-bold mb-2">Password Reset Errors:</h2>
+    <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<h1 class="text-3xl font-bold text-center mb-8 mt-8 text-white">Reset Password</h1>
+<div class="bg-gray-800 flex justify-center mb-8">
+  <div class="w-full max-w-md">
+    <%= form_for(@user, url: password_reset_path(params[:id]), local: true, html: { class: "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" }) do |form| %>
+      <%= hidden_field_tag :email, @user.email %>
+
+      <div class="mb-4">
+        <%= form.label :password, "New Password", class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= form.password_field :password, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      </div>
+
+      <div class="mb-4">
+        <%= form.label :password_confirmation, "Confirm Password", class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= form.password_field :password_confirmation, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <%= form.submit "Update Password", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+      </div>
+    <% end %>
+  </div>
+</div>

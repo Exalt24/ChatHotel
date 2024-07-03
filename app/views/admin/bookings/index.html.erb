@@ -1,0 +1,163 @@
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+    <div class="flex justify-between items-center">
+      <h1 class="font-bold text-4xl">Bookings</h1>
+      <div class="flex justify-between mb-4">
+        <%= form_with(url: admin_bookings_path, method: :get, local: true, class: "flex gap-4") do |form| %>
+          <div>
+            <%= form.label :start_date, "Start Date", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.date_field :start_date, value: params[:start_date], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
+          </div>
+          <div>
+            <%= form.label :end_date, "End Date", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.date_field :end_date, value: params[:end_date], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
+          </div>
+          <div>
+            <%= form.label :user_id, "Customer ID", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.number_field :user_id, value: params[:user_id], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
+          </div>
+          <div>
+            <%= form.label :hotel_id, "Hotel ID", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.number_field :hotel_id, value: params[:hotel_id], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
+          </div>
+          <div class="flex items-end gap-1">
+            <%= form.submit "Filter", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+            <% if params[:start_date].present? || params[:end_date].present? || params[:user_id].present? || params[:hotel_id].present? %>
+              <%= link_to "Clear", admin_bookings_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+
+  <div class="flex flex-col w-full overlow-x-auto sm:mx-0.5 lg:mx-0.5">
+    <!-- Filter Form -->
+    
+
+    <div class="py-2 inline-block min-w-full">
+      <div class="overlow-x-auto">
+        <table class="min-w-full table-fixed overflow-x-scroll">
+          <thead class="bg-white border-b">
+            <tr>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <div class="flex items-center gap-2">
+                  <%= link_to "ID", url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center" %>
+                  <% if params[:order] == 'id_asc' || params[:order].blank? %>
+                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                </div>
+              </th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <div class="flex items-center gap-2">
+                  <%= link_to "User ID", url_for(params.permit(:page).merge(order: params[:order] == 'user_id_asc' || params[:order].blank? ? 'user_id_desc' : 'user_id_asc')), class: "flex items-center" %>
+                  <% if params[:order] == 'user_id_asc' || params[:order].blank? %>
+                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                </div>
+              </th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <div class="flex items-center gap-2">
+                  <%= link_to "Hotel ID", url_for(params.permit(:page).merge(order: params[:order] == 'hotel_id_asc' || params[:order].blank? ? 'hotel_id_desc' : 'hotel_id_asc')), class: "flex items-center" %>
+                  <% if params[:order] == 'hotel_id_asc' || params[:order].blank? %>
+                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                </div>
+              </th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <div class="flex items-center gap-2">
+                  <%= link_to "Booked Name", url_for(params.permit(:page).merge(order: params[:order] == 'booked_name_asc' || params[:order].blank? ? 'booked_name_desc' : 'booked_name_asc')), class: "flex items-center" %>
+                  <% if params[:order] == 'booked_name_asc' || params[:order].blank? %>
+                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                </div>
+              </th>
+              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Booked Number</th>
+              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Start Date</th>
+              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">End Date</th>
+              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Room Type</th>
+              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Total Cost</th>
+              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @admin_bookings.each do |booking| %>
+              <tr class="bg-gray-50 border-b">
+                <td class="px-6 py-4 text-sm font-medium text-gray-800 underline">
+                  <%= link_to booking.id, admin_booking_path(booking) %>
+                </td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.user_id %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.hotel_id %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.booked_name %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.booked_number %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.start_date %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.end_date %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.room_type.titleize %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.total_cost %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.status.capitalize %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="pagination flex justify-end mt-4">
+      <% if @admin_bookings.total_pages > 1 %>
+        <ul class="flex items-center">
+          <% if @admin_bookings.current_page > 1 %>
+            <li><%= link_to "« Previous", url_for(page: @admin_bookings.current_page - 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+          <% else %>
+            <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md mr-2">« Previous</span></li>
+          <% end %>
+
+          <% @admin_bookings.total_pages.times do |page| %>
+            <% if @admin_bookings.current_page == page + 1 %>
+              <li><span class="px-3 py-1 bg-blue-600 text-white rounded-md mr-2"><%= page + 1 %></span></li>
+            <% else %>
+              <li><%= link_to page + 1, url_for(page: page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+            <% end %>
+          <% end %>
+
+          <% if @admin_bookings.current_page < @admin_bookings.total_pages %>
+            <li><%= link_to "Next »", url_for(page: @admin_bookings.current_page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md ml-2" %></li>
+          <% else %>
+            <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md ml-2">Next »</span></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const startDateField = document.getElementById('start-date-field');
+    const endDateField = document.getElementById('end-date-field');
+
+    startDateField.addEventListener('change', function() {
+      if (startDateField.value > endDateField.value) {
+        alert('Start date cannot be after End date.');
+        startDateField.value = endDateField.value; // Reset start date to end date
+      }
+    });
+
+    endDateField.addEventListener('change', function() {
+      if (endDateField.value < startDateField.value) {
+        alert('End date cannot be before Start date.');
+        endDateField.value = startDateField.value; // Reset end date to start date
+      }
+    });
+  });
+</script>

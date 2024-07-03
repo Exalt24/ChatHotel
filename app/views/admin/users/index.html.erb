@@ -1,0 +1,100 @@
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-4xl">Users</h1>
+    <%= form_with(url: admin_users_path, method: "get", local: true, class: "mb-4") do |form| %>
+    <div class="flex items-center mb-2">
+      <%= form.text_field :search, placeholder: "Search by email or name...", class: "rounded-lg py-2 px-4", id: "search-input" %>
+      <%= form.submit "Search", class: "bg-blue-600 text-white py-2 px-4 rounded-lg ml-2", id: "search-button" %>
+    </div>
+    <% end %>
+  </div>
+
+  
+
+  <div class="flex flex-col w-full overlow-x-auto sm:mx-0.5 lg:mx-0.5">
+    <div class="py-2 inline-block min-w-full">
+      <div class="overlow-x-auto">
+        <table class="min-w-full table-fixed overflow-x-scroll">
+          <thead class="bg-white border-b">
+            <tr>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <div class="flex items-center gap-2">
+                  <%= link_to "ID", url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center" %>
+                  <% if params[:order] == 'id_asc' || params[:order].blank? %>
+                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                </div>
+              </th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <div class="flex items-center gap-2">
+                  <%= link_to "Email", url_for(params.permit(:page).merge(order: params[:order] == 'email_asc' || params[:order].blank? ? 'email_desc' : 'email_asc')), class: "flex items-center" %>
+                  <% if params[:order] == 'email_asc' || params[:order].blank? %>
+                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                </div>
+              </th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <div class="flex items-center gap-2">
+                  <%= link_to "Name", url_for(params.permit(:page).merge(order: params[:order] == 'name_asc' || params[:order].blank? ? 'name_desc' : 'name_asc')), class: "flex items-center" %>
+                  <% if params[:order] == 'name_asc' || params[:order].blank? %>
+                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                </div>
+              </th>
+              <th scope="col" class="w-1/4 text-sm font-medium text-gray-800 px-6 py-4 text-left">Mobile Number</th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">Admin Privilege</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @admin_users.each do |user| %>
+              <tr class="bg-gray-50 border-b">
+                <td class="px-6 py-4 text-sm font-medium text-gray-800 underline">
+                  <%= link_to user.id, admin_user_path(user) %>
+                </td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= user.email %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= user.first_name %> <%= user.last_name %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= user.mobile_number %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= user.admin %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="pagination flex justify-end mt-4">
+      <% if @admin_users.total_pages > 1 %>
+        <ul class="flex items-center">
+          <% if @admin_users.current_page > 1 %>
+            <li><%= link_to "« Previous", url_for(page: @admin_users.current_page - 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+          <% else %>
+            <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md mr-2">« Previous</span></li>
+          <% end %>
+
+          <% @admin_users.total_pages.times do |page| %>
+            <% if @admin_users.current_page == page + 1 %>
+              <li><span class="px-3 py-1 bg-blue-600 text-white rounded-md mr-2"><%= page + 1 %></span></li>
+            <% else %>
+              <li><%= link_to page + 1, url_for(page: page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+            <% end %>
+          <% end %>
+
+          <% if @admin_users.current_page < @admin_users.total_pages %>
+            <li><%= link_to "Next »", url_for(page: @admin_users.current_page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md ml-2" %></li>
+          <% else %>
+            <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md ml-2">Next »</span></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>

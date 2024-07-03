@@ -1,0 +1,31 @@
+<div class="mx-auto md:w-2/3 w-full flex">
+  <div class="mx-auto">
+    <% if notice.present? %>
+      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+    <% end %>
+
+    <%= render @admin_hotel %>
+
+    <div class="my-5">
+      <h2 class="font-medium text-lg mb-2">Current Photos:</h2>
+      
+      <% if @admin_hotel.images.any? %>
+        <div class="flex flex-wrap gap-4">
+          <% @admin_hotel.images.each do |image| %>
+            <%= image_tag image.variant(resize: "300x300"), class: "rounded-md border border-gray-300 shadow" %>
+          <% end %>
+        </div>
+      <% else %>
+        <p>No photos yet.</p>
+      <% end %>
+    </div>
+
+
+
+    <%= link_to "Edit this hotel", edit_admin_hotel_path(@admin_hotel), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <div class="inline-block ml-2">
+      <%= button_to "Destroy this hotel", admin_hotel_path(@admin_hotel), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+    </div>
+    <%= link_to "Back to hotels", admin_hotels_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  </div>
+</div>

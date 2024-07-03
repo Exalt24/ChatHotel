@@ -1,0 +1,26 @@
+<div class="mx-auto md:w-2/3 w-full flex">
+  <div class="mx-auto">
+    <% if notice.present? %>
+      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+    <% end %>
+
+    <%= render @admin_user %>
+
+    <% unless current_user.id != 1 %>
+    <div class="mt-2 inline-block">
+      <% if @admin_user.admin? %>
+        <%= button_to "Remove admin privilege", toggle_admin_admin_user_path(@admin_user), method: :patch, class: "rounded-lg py-3 px-5 bg-gray-100 font-medium", style: "display: inline-block;" %>
+      <% else %>
+        <%= button_to "Give admin privilege", toggle_admin_admin_user_path(@admin_user), method: :patch, class: "rounded-lg py-3 px-5 bg-gray-100 font-medium", style: "display: inline-block;" %>
+      <% end %>
+    </div>
+    <% end %>
+
+    <% unless @admin_user.admin? && current_user.id != 1 %>
+      <div class="mt-2 inline-block ml-2">
+        <%= button_to "Destroy this user", admin_user_path(@admin_user), method: :delete, class: "rounded-lg py-3 px-5 bg-gray-100 font-medium", style: "display: inline-block;" %>
+      </div>
+    <% end %>
+    <%= link_to "Back to users", admin_users_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  </div>
+</div>

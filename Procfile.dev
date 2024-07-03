@@ -1,0 +1,2 @@
+web: ./start_rails.sh
+css: bin/rails tailwindcss:watch
