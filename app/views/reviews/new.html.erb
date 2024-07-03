@@ -33,7 +33,8 @@
       <%= form.text_area :content, class: "form-textarea w-full" %>
     </div>
 
-    <div class="flex justify-end items-center">
+    <div class="flex justify-between items-center">
+      <%= link_to "Go Back", hotel_path(@hotel), class: "bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
       <%= form.submit "Submit Review", class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" %>
     </div>
   <% end %>
