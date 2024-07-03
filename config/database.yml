@@ -84,4 +84,3 @@ production:
   <<: *default
   database: hotel_booking_app_production
   username: hotel_booking_app
-  password: <%= ENV["HOTEL_BOOKING_APP_DATABASE_PASSWORD"] %>
