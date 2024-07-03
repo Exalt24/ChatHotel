@@ -2,7 +2,7 @@ class BookingsController < ApplicationController
   before_action :set_hotel_and_current_user, only: [ :new, :create, :calculate_price ]
   before_action :logged_in_user, only: [ :index, :show, :new, :create, :destroy, :update, :cancel ]
   before_action :set_booking, only: %i[ show edit update destroy cancel ]
-  before_action :correct_user, only: [ :new, :create, :cancel, :edit, :calculate_price ]
+  before_action :correct_user, only: [ :cancel, :edit, :destroy ]
 
   # GET /bookings or /bookings.json
   def index
@@ -124,6 +124,12 @@ end
 
     def correct_user
       @booking = current_user.bookings.find_by(id: params[:id])
-      redirect_to(root_url) unless @booking.nil?
+      if @booking.nil?
+        puts "Redirecting to root_url because booking with ID #{params[:id]} does not belong to current user."
+        redirect_to root_url
+      else
+        puts "Booking found: #{@booking.attributes}"
+      end
     end
+
 end

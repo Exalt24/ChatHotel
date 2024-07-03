@@ -3,9 +3,14 @@ class ReviewsController < ApplicationController
   before_action :correct_user, only: [ :new, :create ]
 
   def new
-    @hotel = Hotel.find(params[:hotel_id])
+    @hotel = Hotel.find_by(id: params[:hotel_id])
+    unless @hotel
+      redirect_to hotels_path, alert: "Hotel not found."
+      return
+    end
     @review = @hotel.reviews.build
   end
+
 
   def create
     @hotel = Hotel.find(params[:hotel_id])  # Ensure @hotel is set for error handling
@@ -29,7 +34,11 @@ class ReviewsController < ApplicationController
   end
 
   def correct_user
-    @user = User.find(params[:id])
-    redirect_to(root_url) unless @user == current_user
+    @hotel = Hotel.find(params[:hotel_id])
+    redirect_to root_url, alert: "Hotel not found." unless @hotel
+    if logged_in?
+    else
+      redirect_to login_url, alert: "Please log in to leave a review."
+    end
   end
 end

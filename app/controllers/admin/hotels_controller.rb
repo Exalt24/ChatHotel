@@ -71,19 +71,19 @@ class Admin::HotelsController < AdminController
           end
         end
 
-        # Handle image deletions
-        if params[:hotel][:delete_images].present?
-          puts "Delete images IDs: #{params[:delete_images]}"
-          params[:hotel][:delete_images].each do |image_id|
-            image = @admin_hotel.images.find_by_id(image_id)
-            if image
-              puts "Found image #{image_id}: #{image.filename}"
-              image.purge
-            else
-              puts "Image #{image_id} not found."
-            end
+
+      if params[:hotel][:delete_images].present?
+        params[:hotel][:delete_images].each do |image_id|
+          image = @admin_hotel.images.find_by_id(image_id)
+          if image
+            image.purge
+            image.blob.purge
+            Rails.logger.info "Deleted image #{image_id} from S3."
+          else
+            Rails.logger.warn "Image #{image_id} not found."
           end
         end
+      end
 
         if params[:hotel][:amenities].present?
           @admin_hotel.amenities = params[:hotel][:amenities].join(",")
