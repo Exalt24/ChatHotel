@@ -90,8 +90,8 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
 
-  # host = "localhost:5000"
-  # config.action_mailer.default_url_options = { host: host, protocol: "http" }
+  host = "https://chathotel.onrender.com"
+  config.action_mailer.default_url_options = { host: host }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
