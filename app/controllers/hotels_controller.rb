@@ -2,23 +2,19 @@ class HotelsController < ApplicationController
   # GET /hotels or /hotels.json
   def index
     @hotels = Hotel.all
-
     if params[:location].present?
       @hotels = @hotels.where("location ILIKE ?", "%#{params[:location]}%")
     end
+    if params[:start_date].present? && params[:end_date].present? && params[:room_type].present?
+      start_date = Date.parse(params[:start_date])
+      end_date = Date.parse(params[:end_date])
+      room_type = params[:room_type]
 
-    if params[:start_date].present? || params[:end_date].present?
-      if params[:start_date].blank? || params[:end_date].blank?
-        flash.now[:alert] = "Please provide start date, end date, and room type for the search."
-      else
-        start_date = Date.parse(params[:start_date])
-        end_date = Date.parse(params[:end_date])
-        room_type = params[:room_type]
-
-        @hotels = @hotels.left_joins(:bookings).where.not(bookings: { start_date: start_date..end_date, room_type: room_type }).distinct
-      end
+      # Filter hotels that do not have any overlapping bookings for the specified room type and date range
+      @hotels = @hotels.where.not(id: Hotel.joins(:bookings).where("bookings.room_type = ? AND bookings.start_date <= ? AND bookings.end_date >= ?", room_type, end_date, start_date)).distinct
+    else
+      flash.now[:alert] = "Please provide start date, end date, and room type for the search." if params[:start_date].present? || params[:end_date].present?
     end
-
     @hotels = @hotels.paginate(page: params[:page], per_page: 9)
   end
 
