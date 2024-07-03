@@ -25,15 +25,26 @@
     <%= form_for(@user, url: password_reset_path(params[:id]), local: true, html: { class: "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" }) do |form| %>
       <%= hidden_field_tag :email, @user.email %>
 
+  <%= form.label :password, "New Password", class: "block text-gray-700 text-sm font-bold mb-2" %>
       <div class="mb-4">
-        <%= form.label :password, "New Password", class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.password_field :password, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
-      </div>
+  <div class="flex justify-between items-center gap-2">
+    <%= form.password_field :password, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", id: "user_password" %>
+    <span class="toggle-password absolute right-0 top-0 mt-2 mr-2 cursor-pointer">
+      <i class="fas fa-eye text-gray-500"></i>
+    </span>
+  </div>
+</div>
 
-      <div class="mb-4">
-        <%= form.label :password_confirmation, "Confirm Password", class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.password_field :password_confirmation, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
-      </div>
+ <%= form.label :password_confirmation, "Confirm Password", class: "block text-gray-700 text-sm font-bold mb-2" %>
+<div class="mb-4">
+  <div class="flex justify-between items-center gap-2">
+    <%= form.password_field :password_confirmation, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", id: "confirm_password" %>
+    <span class="toggle-password-confirmation absolute right-0 top-0 mt-2 mr-2 cursor-pointer">
+      <i class="fas fa-eye text-gray-500"></i>
+    </span>
+  </div>
+</div>
+
 
       <div class="flex items-center justify-between">
         <%= form.submit "Update Password", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
@@ -41,3 +52,33 @@
     <% end %>
   </div>
 </div>
+
+
+
+<script>
+ $(document).ready(function() {
+  // Toggle password visibility for 'Password' field
+  $('.toggle-password').click(function() {
+    var passwordField = $('#user_password');
+    var fieldType = passwordField.attr('type');
+    
+    if (fieldType === 'password') {
+      passwordField.attr('type', 'text');
+    } else {
+      passwordField.attr('type', 'password');
+    }
+  });
+
+  // Toggle password visibility for 'Confirm Password' field
+  $('.toggle-password-confirmation').click(function() {
+    var passwordConfirmField = $('#user_password_confirmation');
+    var fieldType = passwordConfirmField.attr('type');
+    
+    if (fieldType === 'password') {
+      passwordConfirmField.attr('type', 'text');
+    } else {
+      passwordConfirmField.attr('type', 'password');
+    }
+  });
+});
+</script>

@@ -23,31 +23,37 @@
             <tr>
               <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
                 <div class="flex items-center gap-2">
-                  <%= link_to "ID", url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center" %>
+                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center" do %>
+                  <span>ID<span>
                   <% if params[:order] == 'id_asc' || params[:order].blank? %>
                     <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
                   <% else %>
                     <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
                   <% end %>
-                </div>
-              </th>
-              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-                <div class="flex items-center gap-2">
-                  <%= link_to "Email", url_for(params.permit(:page).merge(order: params[:order] == 'email_asc' || params[:order].blank? ? 'email_desc' : 'email_asc')), class: "flex items-center" %>
-                  <% if params[:order] == 'email_asc' || params[:order].blank? %>
-                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
-                  <% else %>
-                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
                   <% end %>
                 </div>
               </th>
               <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
                 <div class="flex items-center gap-2">
-                  <%= link_to "Name", url_for(params.permit(:page).merge(order: params[:order] == 'name_asc' || params[:order].blank? ? 'name_desc' : 'name_asc')), class: "flex items-center" %>
+                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'email_asc' || params[:order].blank? ? 'email_desc' : 'email_asc')), class: "flex items-center" do %>
+                  <span>Email<span>
+                  <% if params[:order] == 'email_asc' || params[:order].blank? %>
+                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                  <% end %>
+                </div>
+              </th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <div class="flex items-center gap-2">
+                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'name_asc' || params[:order].blank? ? 'name_desc' : 'name_asc')), class: "flex items-center" do %>
+                  <span>Name<span>
                   <% if params[:order] == 'name_asc' || params[:order].blank? %>
                     <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
                   <% else %>
                     <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
                   <% end %>
                 </div>
               </th>

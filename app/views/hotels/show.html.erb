@@ -80,7 +80,7 @@
       <div class="flex justify-between items-center mt-6">
         <%= link_to "Back to Hotels", hotels_path, class: "text-blue-500 hover:underline" %>
         <div class="flex space-x-4">
-          <% if logged_in? %>
+           <% if logged_in? && current_user.bookings.exists?(hotel_id: @hotel.id) %>
             <%= link_to "Leave a Review", new_hotel_review_path(@hotel), class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" %>
           <% end %>
           <%= link_to "Book Now", new_booking_path(hotel_id: @hotel.id), class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" %>

@@ -44,45 +44,45 @@
           <thead class="bg-white border-b">
             <tr>
               <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-                <div class="flex items-center gap-2">
-                  <%= link_to "ID", url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center" %>
-                  <% if params[:order] == 'id_asc' || params[:order].blank? %>
-                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
-                  <% else %>
-                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
-                  <% end %>
-                </div>
-              </th>
-              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-                <div class="flex items-center gap-2">
-                  <%= link_to "User ID", url_for(params.permit(:page).merge(order: params[:order] == 'user_id_asc' || params[:order].blank? ? 'user_id_desc' : 'user_id_asc')), class: "flex items-center" %>
-                  <% if params[:order] == 'user_id_asc' || params[:order].blank? %>
-                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
-                  <% else %>
-                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
-                  <% end %>
-                </div>
-              </th>
-              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-                <div class="flex items-center gap-2">
-                  <%= link_to "Hotel ID", url_for(params.permit(:page).merge(order: params[:order] == 'hotel_id_asc' || params[:order].blank? ? 'hotel_id_desc' : 'hotel_id_asc')), class: "flex items-center" %>
-                  <% if params[:order] == 'hotel_id_asc' || params[:order].blank? %>
-                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
-                  <% else %>
-                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
-                  <% end %>
-                </div>
-              </th>
-              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-                <div class="flex items-center gap-2">
-                  <%= link_to "Booked Name", url_for(params.permit(:page).merge(order: params[:order] == 'booked_name_asc' || params[:order].blank? ? 'booked_name_desc' : 'booked_name_asc')), class: "flex items-center" %>
-                  <% if params[:order] == 'booked_name_asc' || params[:order].blank? %>
-                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
-                  <% else %>
-                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
-                  <% end %>
-                </div>
-              </th>
+            <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center justify-between" do %>
+              <span>ID</span>
+              <% if params[:order] == 'id_asc' || params[:order].blank? %>
+                <i class="fas fa-arrow-down text-sm text-gray-500"></i>
+              <% else %>
+                <i class="fas fa-arrow-up text-sm text-gray-500"></i>
+              <% end %>
+            <% end %>
+          </th>
+          <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+            <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'user_id_asc' || params[:order].blank? ? 'user_id_desc' : 'user_id_asc')), class: "flex items-center justify-between" do %>
+              <span>User ID</span>
+              <% if params[:order] == 'user_id_asc' || params[:order].blank? %>
+                <i class="fas fa-arrow-down text-sm text-gray-500"></i>
+              <% else %>
+                <i class="fas fa-arrow-up text-sm text-gray-500"></i>
+              <% end %>
+            <% end %>
+          </th>
+          <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+            <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'hotel_id_asc' || params[:order].blank? ? 'hotel_id_desc' : 'hotel_id_asc')), class: "flex items-center justify-between" do %>
+              <span>Hotel ID</span>
+              <% if params[:order] == 'hotel_id_asc' || params[:order].blank? %>
+                <i class="fas fa-arrow-down text-sm text-gray-500"></i>
+              <% else %>
+                <i class="fas fa-arrow-up text-sm text-gray-500"></i>
+              <% end %>
+            <% end %>
+          </th>
+          <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+            <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'booked_name_asc' || params[:order].blank? ? 'booked_name_desc' : 'booked_name_asc')), class: "flex items-center justify-between" do %>
+              <span>Booked Name</span>
+              <% if params[:order] == 'booked_name_asc' || params[:order].blank? %>
+                <i class="fas fa-arrow-down text-sm text-gray-500"></i>
+              <% else %>
+                <i class="fas fa-arrow-up text-sm text-gray-500"></i>
+              <% end %>
+            <% end %>
+          </th>
               <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Booked Number</th>
               <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Start Date</th>
               <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">End Date</th>
