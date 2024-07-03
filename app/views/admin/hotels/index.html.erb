@@ -1,0 +1,102 @@
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-4xl">Hotels</h1>
+    <%= form_with(url: admin_hotels_path, method: "get", local: true, class: "mb-4") do |form| %>
+    <div class="flex items-center mb-2">
+      <%= form.text_field :search, placeholder: "Search by name or location...", class: "rounded-lg py-2 px-4", id: "search-input" %>
+      <%= form.submit "Search", class: "bg-blue-600 text-white py-2 px-4 rounded-lg ml-2", id: "search-button" %>
+    </div>
+    <% end %>
+    <%= link_to "New hotel", new_admin_hotel_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
+  </div>
+
+  
+
+  <div class="flex flex-col w-full overlow-x-auto sm:mx-0.5 lg:mx-0.5">
+    <div class="py-2 inline-block min-w-full">
+      <div class="overlow-x-auto">
+        <table class="min-w-full table-fixed overflow-x-scroll">
+          <thead class="bg-white border-b">
+            <tr>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <div class="flex items-center gap-2">
+                  <%= link_to "ID", url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center" %>
+                  <% if params[:order] == 'id_asc' || params[:order].blank? %>
+                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                </div>
+              </th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <div class="flex items-center gap-2">
+                  <%= link_to "Name", url_for(params.permit(:page).merge(order: params[:order] == 'name_asc' || params[:order].blank? ? 'name_desc' : 'name_asc')), class: "flex items-center" %>
+                  <% if params[:order] == 'name_asc' || params[:order].blank? %>
+                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                </div>
+              </th>
+              <th scope="col" class="w-1/4 text-sm font-medium text-gray-800 px-6 py-4 text-left">Description</th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">Location</th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">Contact Details</th>
+              <th scope="col" class="w-1/4 text-sm font-medium text-gray-800 px-6 py-4 text-left">Amenities</th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @admin_hotels.each do |hotel| %>
+              <tr class="bg-gray-50 border-b">
+                <td class="px-6 py-4 text-sm font-medium text-gray-800 underline">
+                  <%= link_to hotel.id, admin_hotel_path(hotel) %>
+                </td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.name %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.description %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.location %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.contact_details %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.amenities %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800">
+                  <strong>Single:</strong> <%= number_to_currency(hotel.single_room_price) %><br>
+                  <strong>Double:</strong> <%= number_to_currency(hotel.double_room_price) %><br>
+                  <strong>Suite:</strong> <%= number_to_currency(hotel.suite_price) %><br>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="pagination flex justify-end mt-4">
+      <% if @admin_hotels.total_pages > 1 %>
+        <ul class="flex items-center">
+          <% if @admin_hotels.current_page > 1 %>
+            <li><%= link_to "« Previous", url_for(page: @admin_hotels.current_page - 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+          <% else %>
+            <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md mr-2">« Previous</span></li>
+          <% end %>
+
+          <% @admin_hotels.total_pages.times do |page| %>
+            <% if @admin_hotels.current_page == page + 1 %>
+              <li><span class="px-3 py-1 bg-blue-600 text-white rounded-md mr-2"><%= page + 1 %></span></li>
+            <% else %>
+              <li><%= link_to page + 1, url_for(page: page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+            <% end %>
+          <% end %>
+
+          <% if @admin_hotels.current_page < @admin_hotels.total_pages %>
+            <li><%= link_to "Next »", url_for(page: @admin_hotels.current_page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md ml-2" %></li>
+          <% else %>
+            <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md ml-2">Next »</span></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>

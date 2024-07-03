@@ -1,0 +1,90 @@
+<%= form_with(model: [:admin, @admin_hotel], class: "contents", multipart: true) do |form| %>
+
+  <% if @admin_hotel.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <h2><%= pluralize(@admin_hotel.errors.count, "error") %> prohibited this admin_hotel from being saved:</h2>
+
+      <ul>
+        <% @admin_hotel.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :description %>
+    <%= form.text_area :description, rows: 4, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :location %>
+    <%= form.text_field :location, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :contact_details %>
+    <%= form.text_field :contact_details, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+  <%= form.label :amenities %>
+  <% selected_amenities = @admin_hotel.amenities.present? ? @admin_hotel.amenities.split(',').map(&:strip) : [] %>
+  <% ['Pool', 'Gym', 'Spa', 'Restaurant', 'WiFi', 'Parking', 'Pet-friendly'].each do |amenity| %>
+    <label class="block mt-2">
+      <%= check_box_tag 'hotel[amenities][]', amenity, selected_amenities.include?(amenity), class: "mr-2 leading-tight" %>
+      <%= amenity %>
+    </label>
+  <% end %>
+</div>
+
+
+
+  <div class="my-5 flex justify-between">
+    <div class="w-1/4">
+      <%= form.label :single_room_price, class: "block mb-1" %>
+      <%= form.number_field :single_room_price, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 w-full" %>
+    </div>
+    <div class="w-1/4">
+      <%= form.label :double_room_price, class: "block mb-1" %>
+      <%= form.number_field :double_room_price, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 w-full" %>
+    </div>
+    <div class="w-1/4">
+      <%= form.label :suite_price, class: "block mb-1" %>
+      <%= form.number_field :suite_price, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 w-full" %>
+    </div>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :images, "Upload Images" %>
+    <%= form.file_field :images, multiple: true, class: "block mt-2", accept: 'image/*' %>
+  </div>
+
+  <% if local_assigns[:show_photos] && @admin_hotel.images.present? %>
+    <div class="my-5">
+      <h2>Delete Photos:</h2>
+
+      <div class="flex flex-wrap gap-4">
+        <% @admin_hotel.images.each do |image| %>
+          <div class="col-md-3 mb-3">
+            <%= image_tag url_for(image.variant(resize: "100x100")), class: "preview-image" %>
+            <%= form.check_box :delete_images, { multiple: true }, image.id, nil %>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  <% end %>
+
+
+
+
+  <div class="inline mt-5">
+    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

@@ -1,0 +1,38 @@
+<div id="<%= dom_id(booking) %>" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+
+  <p class="my-5">
+    <strong class="block text-gray-700 font-medium mb-1">Name:</strong>
+    <%= "#{booking.user.first_name} #{booking.user.last_name}" if booking.user %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block text-gray-700 font-medium mb-1">Hotel:</strong>
+    <%= booking.hotel.name if booking.hotel %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block text-gray-700 font-medium mb-1">Start date:</strong>
+    <%= booking.start_date %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block text-gray-700 font-medium mb-1">End date:</strong>
+    <%= booking.end_date %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block text-gray-700 font-medium mb-1">Room type:</strong>
+    <%= booking.room_type.titleize %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block text-gray-700 font-medium mb-1">Status:</strong>
+    <%= booking.status.capitalize %>
+  </p>
+
+  <p class="my-5">
+  <strong class="block text-gray-700 font-medium mb-1">Total Cost:</strong>
+  <%= number_to_currency(booking.total_cost) %>
+  </p>
+
+</div>

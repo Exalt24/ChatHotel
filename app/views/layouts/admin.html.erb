@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ChatHotel Admin</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <!-- Include jQuery and Popper.js from CDN -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- Include Rails UJS from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@rails/ujs"></script>
+  </head>
+
+  <body>
+    <main class="flex">
+     
+            <nav class="w-64 p-4 h-screen bg-gray-600 sticky top-0">
+                <div class="flex">
+                    <%= image_tag "logo.png", class: "w-16" %>
+                    <h1 class ="text-md py-2 text-gray-50 font-bold hidden md:block">ChatHotel Admin</h1>
+                </div>
+                <ul class="flex flex-col text-gray-50">
+                    <li>
+                       <%= link_to admin_path, class: "block px-4 py-2 hover:rounded hover:bg-gray-700" do %>
+                        <%= icon('fa-solid', 'gauge-high', class: "mr-2") %>
+                        <span class="hidden md:inline-block">Dashboard</span>
+                       <% end %>
+                    </li>
+                    <li>
+                       <%= link_to admin_hotels_path, class: "block px-4 py-2 hover:rounded hover:bg-gray-700" do %>
+                        <%= icon('fa-solid', 'hotel', class: "mr-2") %>
+                        <span class="hidden md:inline-block">Hotel Listings</span>
+                       <% end %>
+                    </li>
+                    <li>
+                       <%= link_to admin_bookings_path, class: "block px-4 py-2 hover:rounded hover:bg-gray-700" do %>
+                        <%= icon('fa-solid', 'calendar-check', class: "mr-2") %>
+                        <span class="hidden md:inline-block">Bookings</span>
+                       <% end %>
+                    </li>
+                    <li>
+                       <%= link_to admin_users_path, class: "block px-4 py-2 hover:rounded hover:bg-gray-700" do %>
+                        <%= icon('fa-solid', 'user', class: "mr-2") %>
+                        <span class="hidden md:inline-block">Users</span>
+                       <% end %>
+                    </li>
+                    <li>
+                       <%= link_to admin_day_price_adjustments_path, class: "block px-4 py-2 hover:rounded hover:bg-gray-700" do %>
+                        <%= icon('fa-solid', 'money-bill', class: "mr-2") %>
+                        <span class="hidden md:inline-block">Pricing Manager</span>
+                       <% end %>
+                    </li>
+                    <li>
+                    <%= link_to logout_path, method: :delete, data: { confirm: "Are you sure you want to sign out?" }, class: "block px-4 py-2 hover:rounded hover:bg-gray-700" do %>
+                        <%= icon('fa-solid', 'sign-out', class: 'mr-2') %> <span class="hidden md:inline-block">Sign out</span>
+                     <% end %>
+                     </li>
+                </ul>
+            </nav>
+        <div class="w-full p-8">
+        
+        <%= yield %>
+        </div>
+    </main>
+  </body>
+</html>

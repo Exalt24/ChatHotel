@@ -1,0 +1,50 @@
+<div class="container mx-auto px-6 mt-8 mb-8">
+  <h1 class="text-3xl font-bold mb-4 text-white">Hotels</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% @hotels.each do |hotel| %>
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <% if hotel.images.attached? %>
+            <%= image_tag hotel.images.first.variant(resize: "400x300"), class: "w-full h-64 object-cover object-center" %>
+        <% else %>
+            <%= image_tag "logo.png", class: "w-full h-64 object-cover object-center" %>
+        <% end %>
+        <div class="p-4">
+          <h2 class="text-xl font-bold mb-2"><%= hotel.name %></h2>
+          <p class="text-gray-600 mb-2"><%= hotel.location %></p>
+          <p class="text-gray-700 mb-4"><%= truncate(hotel.description, length: 150) %></p>
+          <div class="flex justify-between items-center">
+            <div>
+              <%= link_to "View Details", hotel_path(hotel), class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <div class="pagination flex justify-end mt-4">
+      <% if @hotels.total_pages > 1 %>
+        <ul class="flex items-center">
+          <% if @hotels.current_page > 1 %>
+            <li><%= link_to "« Previous", url_for(page: @hotels.current_page - 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+          <% else %>
+            <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md mr-2">« Previous</span></li>
+          <% end %>
+
+          <% @hotels.total_pages.times do |page| %>
+            <% if @hotels.current_page == page + 1 %>
+              <li><span class="px-3 py-1 bg-blue-600 text-white rounded-md mr-2"><%= page + 1 %></span></li>
+            <% else %>
+              <li><%= link_to page + 1, url_for(page: page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+            <% end %>
+          <% end %>
+
+          <% if @hotels.current_page < @hotels.total_pages %>
+            <li><%= link_to "Next »", url_for(page: @hotels.current_page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md ml-2" %></li>
+          <% else %>
+            <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md ml-2">Next »</span></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>
