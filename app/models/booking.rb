@@ -47,10 +47,11 @@ class Booking < ApplicationRecord
     conflicting_booking = Booking.where(hotel_id: hotel_id, room_type: room_type)
                                  .where("start_date <= ? AND end_date >= ?", end_date, start_date)
                                  .where.not(id: id) # Exclude current booking from the check if updating
+                                 .where(status: "confirmed") # Consider only confirmed bookings
 
     if conflicting_booking.exists?
       conflicting_dates = conflicting_booking.pluck(:start_date, :end_date).map { |sd, ed| "#{sd} to #{ed}" }.join(", ")
-      errors.add(:base, "Room is already booked for the following dates: #{conflicting_dates}.")
+      errors.add(:base, "Room is already booked for the following confirmed dates: #{conflicting_dates}.")
     end
   end
 
