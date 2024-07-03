@@ -69,7 +69,8 @@
 
       <div class="flex items-center justify-between">
         <%= link_to "Back to Hotels", hotels_path, class: "bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-        <%= form.submit 'Book Room', class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+        <%= form.submit 'Book Room', class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline", data: { confirm: 'Are you sure you want to book this room?' } %>
+      </div>
       </div>
 
     <% end %>
