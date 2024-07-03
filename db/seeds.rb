@@ -7,7 +7,6 @@ Hotel.destroy_all
 User.destroy_all
 
 # Create main customer user (if needed)
-# Create main customer user (if needed)
 admin_user = User.new(
   first_name: "Admin",
   last_name: "Admin",
@@ -29,17 +28,6 @@ end
 User.create!(
   first_name: "Daniel",
   last_name: "Cruz",
-  email: "dcruz@up.edu.ph",
-  mobile_number: Faker::Base.regexify(/^(08|09)\d{9}$/),
-  password: "daxdax12345",
-  password_confirmation: "daxdax12345",
-  activated: true,
-  activated_at: Time.zone.now
-)
-
-User.create!(
-  first_name: "Daniel",
-  last_name: "Cruz",
   email: "danielalexispadolina@gmail.com",
   mobile_number: Faker::Base.regexify(/^(08|09)\d{9}$/),
   password: "daxdax12345",
@@ -49,7 +37,7 @@ User.create!(
 )
 
 # Create additional customer users
-10.times do
+5.times do
   User.create!(
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
@@ -67,7 +55,7 @@ amenities_list = [
   "Pool", "Gym", "Spa", "Restaurant", "WiFi", "Parking", "Pet-friendly"
 ]
 
-20.times do
+10.times do
   Hotel.create!(
     name: Faker::Company.name,
     description: Faker::Lorem.paragraph(sentence_count: 5),
@@ -83,7 +71,7 @@ end
 
 # Create bookings for customers
 User.where(admin: false).each do |customer|
-  rand(1..5).times do
+  rand(1..2).times do
     hotel = Hotel.all.sample
     room_type = %w[single_room double_room suite].sample
     start_date = Faker::Date.between(from: Date.today, to: 1.year.from_now)
