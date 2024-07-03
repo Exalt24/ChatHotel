@@ -19,7 +19,7 @@
 
   <div class="my-5">
     <%= form.label :price_adjustment %>
-    <%= form.number_field :price_adjustment, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.number_field :price_adjustment, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full", min: 0 %>
   </div>
 
   <div class="inline mt-5">
