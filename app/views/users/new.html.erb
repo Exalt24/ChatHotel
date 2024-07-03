@@ -45,15 +45,22 @@
         <%= form.text_field :mobile_number, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
       </div>
 
-      <div class="mb-4">
-        <%= form.label :password, "Password", class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.password_field :password, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      <%= form.label :password, "Password", class: "block text-gray-700 text-sm font-bold mb-2 mr-2" %>
+      <div class="mb-4 flex items-center gap-2">  
+        <%= form.password_field :password, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", id: "user_password" %>
+        <span class="toggle-password cursor-pointer">
+          <i class="fas fa-eye text-gray-500"></i>
+        </span>
       </div>
 
-      <div class="mb-6">
-        <%= form.label :password_confirmation, "Confirm Password", class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.password_field :password_confirmation, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      <%= form.label :password_confirmation, "Confirm Password", class: "block text-gray-700 text-sm font-bold mb-2 mr-2" %>
+      <div class="mb-6 flex items-center gap-2">
+        <%= form.password_field :password_confirmation, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", id: "user_password_confirmation" %>
+        <span class="toggle-password-confirmation cursor-pointer">
+          <i class="fas fa-eye text-gray-500"></i>
+        </span>
       </div>
+
 
       <div class="flex items-center justify-between">
         <%= form.submit 'Sign Up', class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
@@ -66,3 +73,32 @@
   </div>
 </div>
 </div>
+
+<script>
+ $(document).ready(function() {
+  // Toggle password visibility for 'Password' field
+  $('.toggle-password').click(function() {
+    var passwordField = $('#user_password');
+    var fieldType = passwordField.attr('type');
+    
+    if (fieldType === 'password') {
+      passwordField.attr('type', 'text');
+    } else {
+      passwordField.attr('type', 'password');
+    }
+  });
+
+  // Toggle password visibility for 'Confirm Password' field
+  $('.toggle-password-confirmation').click(function() {
+    var passwordConfirmField = $('#user_password_confirmation');
+    var fieldType = passwordConfirmField.attr('type');
+    
+    if (fieldType === 'password') {
+      passwordConfirmField.attr('type', 'text');
+    } else {
+      passwordConfirmField.attr('type', 'password');
+    }
+  });
+});
+
+</script>

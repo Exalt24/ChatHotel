@@ -6,20 +6,27 @@
         <%= form.label :email, "Email", class: "block text-gray-700 text-sm font-bold mb-2" %>
         <%= form.email_field :email, autofocus: true, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
       </div>
+      <%= form.label :password, "Password", class: "block text-gray-700 text-sm font-bold mb-2" %>
       <div class="mb-6">
-        <%= form.label :password, "Password", class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <div class="flex justify-between items-center">
-          <%= form.password_field :password, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
-          <%= link_to "Forgot password?", new_password_reset_path, class: "text-blue-500 hover:text-blue-800 ml-2 text-sm" %>
-        </div>
-      </div>
+  
+  <div class="flex justify-between items-center gap-2">
+    <%= form.password_field :password, required: true, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", id: "user_password" %>
+    <span class="toggle-password absolute right-0 top-0 mt-2 mr-2 cursor-pointer">
+      <i class="fas fa-eye text-gray-500"></i>
+    </span>
+  </div>
+</div>
+
       <div class="mb-6">
         <label class="flex items-center">
           <%= form.check_box :remember_me, class: "form-checkbox h-4 w-4 text-blue-600 rounded" %>
           <span class="ml-2 text-gray-700 text-sm font-bold">Remember me</span>
         </label>
+        
       </div>
+      
       <div class="flex items-center justify-between">
+        <%= link_to "Forgot password?", new_password_reset_path, class: "text-blue-500 hover:text-blue-800 ml-2 text-sm" %>
         <%= form.submit "Log in", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
       </div>
     <% end %>
@@ -29,3 +36,20 @@
     </p>
   </div>
 </div>
+
+<script>
+$(document).ready(function() {
+  // Toggle password visibility
+  $('.toggle-password').click(function() {
+    var passwordField = $('#user_password');
+    var fieldType = passwordField.attr('type');
+    
+    if (fieldType === 'password') {
+      passwordField.attr('type', 'text');
+    } else {
+      passwordField.attr('type', 'password');
+    }
+  });
+});
+
+</script>
