@@ -9,8 +9,7 @@ services:
     name: mysite
     runtime: ruby
     plan: free
-    buildCommand: "./bin/render-build.sh && bundle exec rails db:seed"
-    # preDeployCommand: "bundle exec rails db:migrate" # preDeployCommand only available on paid instance types
+    buildCommand: "./bin/render-build.sh && bundle exec rails db:migrate:reset && bundle exec rails db:seed"
     startCommand: "bundle exec rails server -e production"
     envVars:
       - key: DATABASE_URL

@@ -1,8 +1,4 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  # devise :database_authenticatable, :registerable,
-  #        :recoverable, :rememberable, :validatable
 
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :downcase_email
@@ -76,4 +72,3 @@ class User < ApplicationRecord
       self.activation_digest = User.digest(activation_token)
     end
 end
-
