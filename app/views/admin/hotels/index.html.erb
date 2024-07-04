@@ -3,16 +3,30 @@
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
   <% end %>
 
+  <h1 class="font-bold text-4xl">Hotels</h1>
   <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl">Hotels</h1>
-    <%= form_with(url: admin_hotels_path, method: "get", local: true, class: "mb-4") do |form| %>
-    <div class="flex items-center mb-2">
-      <%= form.text_field :search, placeholder: "Search by name or location...", class: "rounded-lg py-2 px-4", id: "search-input" %>
-      <%= form.submit "Search", class: "bg-blue-600 text-white py-2 px-4 rounded-lg ml-2", id: "search-button" %>
-    </div>
-    <% end %>
-    <%= link_to "New hotel", new_admin_hotel_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
+  
+  <div class="flex justify-between mb-4 mt-4">
+  <%= form_with(url: admin_hotels_path, method: "get", local: true, class: "flex gap-4") do |form| %>
+      <div>
+      <%= form.label :id, "ID", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.number_field :id, value: params[:id], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", id: "search-id", min: 1 %>
+      </div>
+      <div>
+      <%= form.label :search, "Name or Location", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :search, value: params[:search], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", id: "search-input" %>
+      </div>
+      <div class="flex items-end gap-1">
+       <%= form.submit "Filter", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm hover:sky-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 cursor-pointer", style: "background-color: #3b606f; color: #e4ebe8;" %>
+            <% if params[:id].present? || params[:search].present? %>
+              <%= link_to "Clear", admin_hotels_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 cursor-pointer", style: "background-color: #e4ebe8; color: #3b606f;" %>
+            <% end %>
+          </div>
+  <% end %>
   </div>
+  <%= link_to "New hotel", new_admin_hotel_path, class: "rounded-lg py-3 px-5 block font-medium", style: "background-color: #3b606f; color: #e4ebe8;" %>
+</div>
+
 
   
 
@@ -23,53 +37,52 @@
           <thead class="bg-white border-b">
             <tr>
               <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-                <div class="flex items-center gap-2">
-                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center" do %>
-                  <span>ID<span>
+                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center justify-between" do %>
+                  <span>ID</span>
                   <% if params[:order] == 'id_asc' || params[:order].blank? %>
-                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                    <i class="fas fa-arrow-down text-sm text-gray-500"></i>
                   <% else %>
-                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                    <i class="fas fa-arrow-up text-sm text-gray-500"></i>
                   <% end %>
                   <% end %>
-                </div>
               </th>
-              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-                <div class="flex items-center gap-2">
-                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'name_asc' || params[:order].blank? ? 'name_desc' : 'name_asc')), class: "flex items-center" do %>
-                  <span>Name<span>
+              <th scope="col" class="w-1/4 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'name_asc' || params[:order].blank? ? 'name_desc' : 'name_asc')), class: "flex items-center justify-between" do %>
+                  <span>Name</span>
                   <% if params[:order] == 'name_asc' || params[:order].blank? %>
-                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                    <i class="fas fa-arrow-down text-sm text-gray-500"></i>
                   <% else %>
-                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                    <i class="fas fa-arrow-up text-sm text-gray-500"></i>
                   <% end %>
                   <% end %>
-                </div>
               </th>
-              <th scope="col" class="w-1/4 text-sm font-medium text-gray-800 px-6 py-4 text-left">Description</th>
-              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">Location</th>
-              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">Contact Details</th>
-              <th scope="col" class="w-1/4 text-sm font-medium text-gray-800 px-6 py-4 text-left">Amenities</th>
-              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">Price</th>
+              <th scope="col" class="w-1/2 text-sm font-medium text-gray-800 px-6 py-4 text-left">Location</th>
+              <th scope="col" class="w-1/8 text-sm font-medium text-gray-800 px-6 py-4 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
             <% @admin_hotels.each do |hotel| %>
-              <tr class="bg-gray-50 border-b">
-                <td class="px-6 py-4 text-sm font-medium text-gray-800 underline">
-                  <%= link_to hotel.id, admin_hotel_path(hotel) %>
-                </td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.name %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.description %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.location %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.contact_details %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.amenities %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800">
-                  <strong>Single:</strong> <%= number_to_currency(hotel.single_room_price) %><br>
-                  <strong>Double:</strong> <%= number_to_currency(hotel.double_room_price) %><br>
-                  <strong>Suite:</strong> <%= number_to_currency(hotel.suite_price) %><br>
-                </td>
-              </tr>
+            <tr class="bg-gray-50 border-b cursor-pointer" data-url="<%= admin_hotel_path(hotel) %>">
+              <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.id %></td>
+              <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.name %></td>
+              <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= hotel.location %></td>
+              <td class="px-6 py-4 text-sm font-medium text-gray-800 relative">
+                <div class="flex justify-center items-center">
+                  <div class= "flex flex-col">
+                  <button class="rounded-full focus:outline-none focus:ring-0 focus:ring-blue-500 flex items-center mt-2" id="options-menu-<%= hotel.id %>" aria-haspopup="true" aria-expanded="false">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M10 6a2 2 0 100-4 2 2 0 000 4zM2 6a2 2 0 100-4 2 2 0 000 4zm16 0a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+
+                  <div class="absolute bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 hidden mt-8 left-4 z-10">
+                    <%= link_to "Edit", edit_admin_hotel_path(hotel), class: "block text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: "menuitem", data: { turbolinks: false } %>
+                    <%= button_to "Delete", admin_hotel_path(hotel), method: :delete, data: { confirm: "Are you sure you want to delete this hotel?" }, class: "block w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 mt-1", role: "menuitem", data: { turbolinks: false } %>
+                  </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
             <% end %>
           </tbody>
         </table>
@@ -90,7 +103,7 @@
 
           <% @admin_hotels.total_pages.times do |page| %>
             <% if @admin_hotels.current_page == page + 1 %>
-              <li><span class="px-3 py-1 bg-blue-600 text-white rounded-md mr-2"><%= page + 1 %></span></li>
+              <li><span class="px-3 py-1 rounded-md mr-2" style="background-color: #3b606f; color: #e4ebe8;"><%= page + 1 %></span></li>
             <% else %>
               <li><%= link_to page + 1, url_for(page: page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
             <% end %>
@@ -104,3 +117,26 @@
         </ul>
       <% end %>
     </div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const rows = document.querySelectorAll("tr[data-url]");
+  const buttons = document.querySelectorAll("[id^='options-menu-']");
+
+  buttons.forEach(button => {
+    button.addEventListener("click", function(event) {
+      event.stopPropagation(); // Prevents the click event from reaching the row
+      const menu = this.nextElementSibling;
+      menu.classList.toggle("hidden");
+    });
+  });
+
+  rows.forEach(row => {
+    row.addEventListener("click", function() {
+      window.location.href = this.dataset.url;
+    });
+  });
+});
+
+</script>

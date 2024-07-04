@@ -23,6 +23,10 @@ class Booking < ApplicationRecord
 
   before_validation :set_total_cost
 
+  def send_booking_email
+    UserMailer.booking_confirmation(self).deliver_now
+  end
+
   private
 
   def dates_are_valid

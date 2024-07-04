@@ -31,36 +31,40 @@
     <main class="flex">
      
             <nav class="w-64 p-4 h-screen bg-gray-600 sticky top-0">
+                <%= link_to admin_path do %>
                 <div class="flex">
-                    <%= image_tag "logo.png", class: "w-16" %>
-                    <h1 class ="text-md py-2 text-gray-50 font-bold hidden md:block">ChatHotel Admin</h1>
-                </div>
+                     <%= image_tag "logo.png", class: "w-16" %>
+                     <h1 class="text-md py-2 text-gray-50 font-bold hidden md:block">ChatHotel Admin</h1>
+                  </div>
+                  <% end %>
+
+
                 <ul class="flex flex-col text-gray-50">
-                    <li>
+                    <li class="<%= 'bg-gray-700' if current_page?(admin_path) %>">
                        <%= link_to admin_path, class: "block px-4 py-2 hover:rounded hover:bg-gray-700" do %>
                         <%= icon('fa-solid', 'gauge-high', class: "mr-2") %>
                         <span class="hidden md:inline-block">Dashboard</span>
                        <% end %>
                     </li>
-                    <li>
+                    <li class="<%= 'bg-gray-700' if request.path.start_with?(admin_hotels_path) %>">
                        <%= link_to admin_hotels_path, class: "block px-4 py-2 hover:rounded hover:bg-gray-700" do %>
                         <%= icon('fa-solid', 'hotel', class: "mr-2") %>
                         <span class="hidden md:inline-block">Hotel Listings</span>
                        <% end %>
                     </li>
-                    <li>
+                    <li class="<%= 'bg-gray-700' if request.path.start_with?(admin_bookings_path) %>">
                        <%= link_to admin_bookings_path, class: "block px-4 py-2 hover:rounded hover:bg-gray-700" do %>
                         <%= icon('fa-solid', 'calendar-check', class: "mr-2") %>
                         <span class="hidden md:inline-block">Bookings</span>
                        <% end %>
                     </li>
-                    <li>
+                    <li class="<%= 'bg-gray-700' if request.path.start_with?(admin_users_path) %>">
                        <%= link_to admin_users_path, class: "block px-4 py-2 hover:rounded hover:bg-gray-700" do %>
                         <%= icon('fa-solid', 'user', class: "mr-2") %>
                         <span class="hidden md:inline-block">Users</span>
                        <% end %>
                     </li>
-                    <li>
+                     <li class="<%= 'bg-gray-700' if request.path.start_with?(admin_day_price_adjustments_path) %>">
                        <%= link_to admin_day_price_adjustments_path, class: "block px-4 py-2 hover:rounded hover:bg-gray-700" do %>
                         <%= icon('fa-solid', 'money-bill', class: "mr-2") %>
                         <span class="hidden md:inline-block">Pricing Manager</span>

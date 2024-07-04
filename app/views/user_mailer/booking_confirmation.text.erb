@@ -1,0 +1,11 @@
+Booking Confirmation
+
+Name: <%= "#{@booking.user.first_name} #{@booking.user.last_name}" if @booking.user %>
+Hotel: <%= @booking.hotel.name if @booking.hotel %>
+Start date: <%= @booking.start_date %>
+End date: <%= @booking.end_date %>
+Room type: <%= @booking.room_type.titleize %>
+Status: <%= @booking.status.capitalize %>
+Total Cost: <%= number_to_currency(@booking.total_cost) %>
+
+Thank you for booking with us!

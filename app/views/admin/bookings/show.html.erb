@@ -6,21 +6,19 @@
 
     <%= render @admin_booking %>
 
-    <% if @admin_booking.status == "confirmed" %>
-      <div class="mt-2 inline-block">
-        <%= button_to "Cancel Booking", toggle_status_admin_booking_path(@admin_booking), method: :patch, class: "rounded-lg py-3 px-5 bg-gray-100 font-medium", style: "display: inline-block;" %>
+  <div class="flex justify-between mt-4 my-5">
+      <%= link_to "Back to bookings", admin_bookings_path, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+      
+      <div class="flex ml-4">
+        <% if @admin_booking.status == "confirmed" %>
+        <%= button_to "Cancel Booking", toggle_status_admin_booking_path(@admin_booking), method: :patch, class: "mr-2 rounded-lg py-3 px-5 inline-block font-medium", style: "background-color: #3b606f; color: #e4ebe8;" %>
+        <% elsif @admin_booking.status == "cancelled" %>
+           <%= button_to "Reconfirm Booking", toggle_status_admin_booking_path(@admin_booking), method: :patch, class: "mr-2 rounded-lg py-3 px-5 inline-block font-medium", style: "background-color: #3b606f; color: #e4ebe8;" %>
+        <% end %>
+        <%= button_to "Delete this booking", admin_booking_path(@admin_booking), method: :delete, class: "rounded-lg py-3 px-5 font-medium cursor-pointer", style: "background-color: #e4ebe8; color: #3b606f;" %>
+    
       </div>
-    <% elsif @admin_booking.status == "cancelled" %>
-      <div class="mt-2 inline-block">
-        <%= button_to "Reconfirm Booking", toggle_status_admin_booking_path(@admin_booking), method: :patch, class: "rounded-lg py-3 px-5 bg-gray-100 font-medium", style: "display: inline-block;" %>
-      </div>
-    <% end %>
-
-
-
-    <div class="mt-2 inline-block ml-2">
-      <%= button_to "Destroy this booking", admin_booking_path(@admin_booking), method: :delete, class: "rounded-lg py-3 px-5 bg-gray-100 font-medium", style: "display: inline-block;" %>
     </div>
-    <%= link_to "Back to bookings", admin_bookings_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+
   </div>
 </div>

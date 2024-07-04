@@ -3,6 +3,7 @@ require "erb"
 
 class UserMailer < ApplicationMailer
   include ActionView::Helpers::UrlHelper
+  include ActionView::Helpers::NumberHelper
   include Rails.application.routes.url_helpers
 
   def account_activation(user)
@@ -57,5 +58,13 @@ class UserMailer < ApplicationMailer
     text_path = Rails.root.join("app", "views", "user_mailer", "password_reset.text.erb")
     subject = "Reset Your Password"
     notify_user(@user, html_path, text_path, subject)
+  end
+
+  def booking_confirmation(booking)
+    @booking = booking
+    html_path = Rails.root.join("app", "views", "user_mailer", "booking_confirmation.html.erb")
+    text_path = Rails.root.join("app", "views", "user_mailer", "booking_confirmation.text.erb")
+    subject = "Booking Confirmation"
+    notify_user(booking.user, html_path, text_path, subject)
   end
 end

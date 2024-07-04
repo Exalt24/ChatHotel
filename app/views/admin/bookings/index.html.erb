@@ -2,11 +2,23 @@
   <% if notice.present? %>
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
   <% end %>
-
+    <h1 class="font-bold text-4xl">Bookings</h1>
     <div class="flex justify-between items-center">
-      <h1 class="font-bold text-4xl">Bookings</h1>
-      <div class="flex justify-between mb-4">
+      
+      <div class="flex justify-between mb-4 mt-4">
         <%= form_with(url: admin_bookings_path, method: :get, local: true, class: "flex gap-4") do |form| %>
+          <div>
+          <%= form.label :id, "ID", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.number_field :id, value: params[:id], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", id: "search-id", min: 1 %>
+        </div>
+         <div>
+            <%= form.label :user_id, "Customer ID", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.number_field :user_id, value: params[:user_id], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", min: 1 %>
+          </div>
+          <div>
+            <%= form.label :hotel_id, "Hotel ID", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.number_field :hotel_id, value: params[:hotel_id], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", min: 1 %>
+          </div>
           <div>
             <%= form.label :start_date, "Start Date", class: "block text-sm font-medium text-gray-700" %>
             <%= form.date_field :start_date, value: params[:start_date], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
@@ -16,17 +28,24 @@
             <%= form.date_field :end_date, value: params[:end_date], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
           </div>
           <div>
-            <%= form.label :user_id, "Customer ID", class: "block text-sm font-medium text-gray-700" %>
-            <%= form.number_field :user_id, value: params[:user_id], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
-          </div>
-          <div>
-            <%= form.label :hotel_id, "Hotel ID", class: "block text-sm font-medium text-gray-700" %>
-            <%= form.number_field :hotel_id, value: params[:hotel_id], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
+          <%= form.label :status, "Status", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.select :status, [['Confirmed', 'confirmed'], ['Cancelled', 'cancelled']], { prompt: 'Select Status' }, { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" } do %>
+          <% if params[:status] == 'confirmed' %>
+            <option value="confirmed" selected="selected">Confirmed</option>
+            <option value="cancelled">Cancelled</option>
+          <% elsif params[:status] == 'cancelled' %>
+            <option value="confirmed">Confirmed</option>
+            <option value="cancelled" selected="selected">Cancelled</option>
+          <% else %>
+            <option value="confirmed">Confirmed</option>
+            <option value="cancelled">Cancelled</option>
+          <% end %>
+          <% end %>
           </div>
           <div class="flex items-end gap-1">
-            <%= form.submit "Filter", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-            <% if params[:start_date].present? || params[:end_date].present? || params[:user_id].present? || params[:hotel_id].present? %>
-              <%= link_to "Clear", admin_bookings_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" %>
+            <%= form.submit "Filter", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm hover:sky-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 cursor-pointer", style: "background-color: #3b606f; color: #e4ebe8;" %>
+            <% if params[:id].present? || params[:start_date].present? || params[:end_date].present? || params[:user_id].present? || params[:hotel_id].present? || params[:status] %>
+              <%= link_to "Clear", admin_bookings_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 cursor-pointer", style: "background-color: #e4ebe8; color: #3b606f;" %>
             <% end %>
           </div>
         <% end %>
@@ -35,77 +54,80 @@
 
 
   <div class="flex flex-col w-full overlow-x-auto sm:mx-0.5 lg:mx-0.5">
-    <!-- Filter Form -->
-    
-
     <div class="py-2 inline-block min-w-full">
       <div class="overlow-x-auto">
         <table class="min-w-full table-fixed overflow-x-scroll">
           <thead class="bg-white border-b">
             <tr>
               <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-            <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center justify-between" do %>
-              <span>ID</span>
-              <% if params[:order] == 'id_asc' || params[:order].blank? %>
-                <i class="fas fa-arrow-down text-sm text-gray-500"></i>
-              <% else %>
-                <i class="fas fa-arrow-up text-sm text-gray-500"></i>
-              <% end %>
-            <% end %>
-          </th>
-          <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-            <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'user_id_asc' || params[:order].blank? ? 'user_id_desc' : 'user_id_asc')), class: "flex items-center justify-between" do %>
-              <span>User ID</span>
-              <% if params[:order] == 'user_id_asc' || params[:order].blank? %>
-                <i class="fas fa-arrow-down text-sm text-gray-500"></i>
-              <% else %>
-                <i class="fas fa-arrow-up text-sm text-gray-500"></i>
-              <% end %>
-            <% end %>
-          </th>
-          <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-            <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'hotel_id_asc' || params[:order].blank? ? 'hotel_id_desc' : 'hotel_id_asc')), class: "flex items-center justify-between" do %>
-              <span>Hotel ID</span>
-              <% if params[:order] == 'hotel_id_asc' || params[:order].blank? %>
-                <i class="fas fa-arrow-down text-sm text-gray-500"></i>
-              <% else %>
-                <i class="fas fa-arrow-up text-sm text-gray-500"></i>
-              <% end %>
-            <% end %>
-          </th>
-          <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-            <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'booked_name_asc' || params[:order].blank? ? 'booked_name_desc' : 'booked_name_asc')), class: "flex items-center justify-between" do %>
-              <span>Booked Name</span>
-              <% if params[:order] == 'booked_name_asc' || params[:order].blank? %>
-                <i class="fas fa-arrow-down text-sm text-gray-500"></i>
-              <% else %>
-                <i class="fas fa-arrow-up text-sm text-gray-500"></i>
-              <% end %>
-            <% end %>
-          </th>
-              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Booked Number</th>
-              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Start Date</th>
-              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">End Date</th>
-              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Room Type</th>
-              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Total Cost</th>
-              <th scope="col" class="w-2/12 text-sm font-medium text-gray-800 px-6 py-4 text-left">Status</th>
+                <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center justify-between" do %>
+                  <span>ID</span>
+                  <% if params[:order] == 'id_asc' || params[:order].blank? %>
+                    <i class="fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                <% end %>
+              </th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'user_id_asc' || params[:order].blank? ? 'user_id_desc' : 'user_id_asc')), class: "flex items-center justify-between" do %>
+                  <span>User ID</span>
+                  <% if params[:order] == 'user_id_asc' || params[:order].blank? %>
+                    <i class="fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                <% end %>
+              </th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
+                <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'hotel_id_asc' || params[:order].blank? ? 'hotel_id_desc' : 'hotel_id_asc')), class: "flex items-center justify-between" do %>
+                  <span>Hotel ID</span>
+                  <% if params[:order] == 'hotel_id_asc' || params[:order].blank? %>
+                    <i class="fas fa-arrow-down text-sm text-gray-500"></i>
+                  <% else %>
+                    <i class="fas fa-arrow-up text-sm text-gray-500"></i>
+                  <% end %>
+                <% end %>
+              </th>
+              <th scope="col" class="w-1/4 text-sm font-medium text-gray-800 px-6 py-4 text-left">Start Date</th>
+              <th scope="col" class="w-1/4 text-sm font-medium text-gray-800 px-6 py-4 text-left">End Date</th>
+              <th scope="col" class="w-1/4 text-sm font-medium text-gray-800 px-6 py-4 text-left">Status</th>
+              <th scope="col" class="w-1/4 text-sm font-medium text-gray-800 px-6 py-4 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
             <% @admin_bookings.each do |booking| %>
-              <tr class="bg-gray-50 border-b">
+              <tr class="bg-gray-50 border-b cursor-pointer" data-url="<%= admin_booking_path(booking) %>">
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.id %></td>
                 <td class="px-6 py-4 text-sm font-medium text-gray-800 underline">
-                  <%= link_to booking.id, admin_booking_path(booking) %>
+                  <%= link_to booking.user_id, admin_user_path(booking.user_id) %>
                 </td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.user_id %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.hotel_id %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.booked_name %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.booked_number %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800 underline">
+                  <%= link_to booking.hotel_id, admin_hotel_path(booking.hotel_id) %>
+                </td>
                 <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.start_date %></td>
                 <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.end_date %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.room_type.titleize %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.total_cost %></td>
                 <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= booking.status.capitalize %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800 relative">
+                  <div class="flex justify-center items-center">
+                    <div class= "flex flex-col">
+                    <button class="rounded-full focus:outline-none focus:ring-0 focus:ring-blue-500 flex items-center mt-2" id="options-menu-<%= booking.id %>" aria-haspopup="true" aria-expanded="false">
+                      <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 6a2 2 0 100-4 2 2 0 000 4zM2 6a2 2 0 100-4 2 2 0 000 4zm16 0a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                      </svg>
+                    </button>
+
+                    <div class="absolute bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 hidden mt-8 left-4 z-10">
+                    <% if booking.status == "confirmed" %>
+                      <%= link_to "Cancel", toggle_status_admin_booking_path(booking), method: :patch, class: "block text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: "menuitem", data: { turbolinks: false } %>
+                    <% elsif booking.status == "cancelled" %>
+                      <%= link_to "Reconfirm", toggle_status_admin_booking_path(booking), method: :patch, class: "block text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: "menuitem", data: { turbolinks: false } %>
+                    <% end %>
+                      <%= button_to "Delete", admin_booking_path(booking), method: :delete, data: { confirm: "Are you sure you want to delete this booking?" }, class: "block w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 mt-1", role: "menuitem", data: { turbolinks: false } %>
+                    </div>
+                    </div>
+                  </div>
+                </td>
               </tr>
             <% end %>
           </tbody>
@@ -123,7 +145,7 @@
 
           <% @admin_bookings.total_pages.times do |page| %>
             <% if @admin_bookings.current_page == page + 1 %>
-              <li><span class="px-3 py-1 bg-blue-600 text-white rounded-md mr-2"><%= page + 1 %></span></li>
+              <li><span class="px-3 py-1 rounded-md mr-2" style="background-color: #3b606f; color: #e4ebe8;"><%= page + 1 %></span></li>
             <% else %>
               <li><%= link_to page + 1, url_for(page: page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
             <% end %>
@@ -159,5 +181,29 @@
         endDateField.value = startDateField.value; // Reset end date to start date
       }
     });
+
   });
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const rows = document.querySelectorAll("tr[data-url]");
+  const buttons = document.querySelectorAll("[id^='options-menu-']");
+
+  buttons.forEach(button => {
+    button.addEventListener("click", function(event) {
+      event.stopPropagation(); // Prevents the click event from reaching the row
+      const menu = this.nextElementSibling;
+      menu.classList.toggle("hidden");
+    });
+  });
+
+  rows.forEach(row => {
+    row.addEventListener("click", function() {
+      window.location.href = this.dataset.url;
+    });
+  });
+});
+
 </script>
