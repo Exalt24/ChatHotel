@@ -1,16 +1,49 @@
 <div class="mx-auto md:w-2/3 w-full mt-8 mb-8">
   <h1 class="text-3xl font-bold mb-4 text-white">Bookings</h1>
 
+  <div class="flex justify-between items-center mb-4">
+    <div>
+      <label for="filter" class="block text-white text-sm font-bold mb-2">Filter by:</label>
+      <form id="filter_form" action="<%= bookings_path %>" method="get">
+        <select id="filter" name="filter" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" onchange="this.form.submit()">
+          <option value="all" <%= "selected" if params[:filter] == "all" %>>All Bookings</option>
+          <option value="confirmed" <%= "selected" if params[:filter] == "confirmed" %>>Confirmed Bookings</option>
+          <option value="cancelled" <%= "selected" if params[:filter] == "cancelled" %>>Cancelled Bookings</option>
+        </select>
+      </form>
+    </div>
+  </div>
+
   <% if @bookings.any? %>
     <% @bookings.each do |booking| %>
-      <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 class="text-2xl font-bold mb-2">
-          <%= link_to "Booking ##{booking.id} - #{booking.hotel.name}", booking_path(booking), class: "text-blue-500 hover:underline" %>
-        </h2>
-        <p class="text-gray-700 mb-4"><%= booking.start_date %> - <%= booking.end_date %></p>
+      <% if params[:filter] == "confirmed" && booking.status == "confirmed" %>
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <h2 class="text-2xl font-bold mb-2">
+            <%= link_to "Booking ##{booking.id} - #{booking.hotel.name}", booking_path(booking), class: "text-blue-500 hover:underline" %>
+          </h2>
+          <p class="text-gray-700 mb-4"><%= booking.start_date %> - <%= booking.end_date %></p>
 
-        <%= link_to "View Details", booking_path(booking), class: "bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium mr-2" %>
-      </div>
+          <%= link_to "View Details", booking_path(booking), class: "bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium mr-2" %>
+        </div>
+      <% elsif params[:filter] == "cancelled" && booking.status == "cancelled" %>
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <h2 class="text-2xl font-bold mb-2">
+            <%= link_to "Booking ##{booking.id} - #{booking.hotel.name}", booking_path(booking), class: "text-blue-500 hover:underline" %>
+          </h2>
+          <p class="text-gray-700 mb-4"><%= booking.start_date %> - <%= booking.end_date %></p>
+
+          <%= link_to "View Details", booking_path(booking), class: "bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium mr-2" %>
+        </div>
+      <% elsif !params[:filter] || params[:filter] == "all" %>
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <h2 class="text-2xl font-bold mb-2">
+            <%= link_to "Booking ##{booking.id} - #{booking.hotel.name}", booking_path(booking), class: "text-blue-500 hover:underline" %>
+          </h2>
+          <p class="text-gray-700 mb-4"><%= booking.start_date %> - <%= booking.end_date %></p>
+
+          <%= link_to "View Details", booking_path(booking), class: "bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium mr-2" %>
+        </div>
+      <% end %>
     <% end %>
   <% else %>
     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -18,12 +51,11 @@
     </div>
   <% end %>
 
-
   <div class="pagination flex justify-end mt-4">
     <% if @bookings.total_pages > 1 %>
       <ul class="flex items-center">
         <% if @bookings.current_page > 1 %>
-          <li><%= link_to "« Previous", bookings_path(page: @bookings.current_page - 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+          <li><%= link_to "« Previous", bookings_path(page: @bookings.current_page - 1, filter: params[:filter]), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
         <% else %>
           <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md mr-2">« Previous</span></li>
         <% end %>
@@ -32,12 +64,12 @@
           <% if @bookings.current_page == page + 1 %>
             <li><span class="px-3 py-1 bg-blue-600 text-white rounded-md mr-2"><%= page + 1 %></span></li>
           <% else %>
-            <li><%= link_to page + 1, bookings_path(page: page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+            <li><%= link_to page + 1, bookings_path(page: page + 1, filter: params[:filter]), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
           <% end %>
         <% end %>
 
         <% if @bookings.current_page < @bookings.total_pages %>
-          <li><%= link_to "Next »", bookings_path(page: @bookings.current_page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md ml-2" %></li>
+          <li><%= link_to "Next »", bookings_path(page: @bookings.current_page + 1, filter: params[:filter]), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md ml-2" %></li>
         <% else %>
           <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md ml-2">Next »</span></li>
         <% end %>

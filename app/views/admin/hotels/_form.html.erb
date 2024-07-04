@@ -89,7 +89,9 @@
   <div class="flex justify-between mt-4 my-5">
     <%= link_to "Back to hotels", admin_hotels_path, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
     <div class="flex ml-4">
+      <% if local_assigns[:show_photos]%>
     <%= link_to "Show this hotel", [:admin, @admin_hotel], class: "mr-2 rounded-lg py-3 px-5 inline-block font-medium", style: "background-color: #3b606f; color: #e4ebe8;" %>
+    <% end %>
     <%= form.submit class: "rounded-lg py-3 px-5 font-medium cursor-pointer", style: "background-color: #e4ebe8; color: #3b606f;" %>
     </div>
   </div>

@@ -133,7 +133,7 @@
        <% if @admin_users.total_pages > 1 %>
         <ul class="flex items-center">
           <% if @admin_users.current_page > 1 %>
-            <li><%= link_to "« Previous", url_for(page: @admin_users.current_page - 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+            <li><%= link_to "« Previous", url_for(params.permit!.merge(page: @admin_users.current_page - 1)), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
           <% else %>
             <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md mr-2">« Previous</span></li>
           <% end %>
@@ -142,12 +142,12 @@
             <% if @admin_users.current_page == page + 1 %>
               <li><span class="px-3 py-1 rounded-md mr-2" style="background-color: #3b606f; color: #e4ebe8;"><%= page + 1 %></span></li>
             <% else %>
-              <li><%= link_to page + 1, url_for(page: page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+              <li><%= link_to page + 1, url_for(params.permit!.merge(page: page + 1)), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
             <% end %>
           <% end %>
 
           <% if @admin_users.current_page < @admin_users.total_pages %>
-            <li><%= link_to "Next »", url_for(page: @admin_users.current_page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md ml-2" %></li>
+            <li><%= link_to "Next »", url_for(params.permit!.merge(page: @admin_users.current_page + 1)), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md ml-2" %></li>
           <% else %>
             <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md ml-2">Next »</span></li>
           <% end %>

@@ -1,5 +1,4 @@
 class Admin::BookingsController < AdminController
-
     before_action :set_booking, only: [ :show, :toggle_status, :destroy ]
 
   def index

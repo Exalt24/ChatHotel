@@ -1,4 +1,5 @@
 class Admin::HotelsController < AdminController
+  before_action :admin_hotel_params
   before_action :set_admin_hotel, only: [ :show, :edit, :update, :destroy ]
 
   def index
@@ -119,8 +120,9 @@ class Admin::HotelsController < AdminController
   end
 
   def admin_hotel_params
-    params.require(:hotel).permit(
-      :id, :name, :description, :location, :contact_details,
+    params.permit(
+      :id, :search, :order, :page,
+      :name, :description, :location, :contact_details,
       :single_room_price, :double_room_price, :suite_price,
       images: [],
       delete_images: [],

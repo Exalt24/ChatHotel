@@ -7,6 +7,16 @@ class BookingsController < ApplicationController
   # GET /bookings or /bookings.json
   def index
     @bookings = current_user.bookings
+
+    if params[:filter].present?
+      case params[:filter]
+      when "confirmed"
+        @bookings = @bookings.where(status: "confirmed")
+      when "cancelled"
+        @bookings = @bookings.where(status: "cancelled")
+      end
+    end
+
     @bookings = @bookings.paginate(page: params[:page], per_page: 5)
   end
 
