@@ -3,14 +3,45 @@
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
   <% end %>
 
+  <h1 class="font-bold text-4xl">Users</h1>
   <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl">Users</h1>
-    <%= form_with(url: admin_users_path, method: "get", local: true, class: "mb-4") do |form| %>
-    <div class="flex items-center mb-2">
-      <%= form.text_field :search, placeholder: "Search by email or name...", class: "rounded-lg py-2 px-4", id: "search-input" %>
-      <%= form.submit "Search", class: "bg-blue-600 text-white py-2 px-4 rounded-lg ml-2", id: "search-button" %>
+    <div class="flex justify-between mb-4 mt-4">
+    <%= form_with(url: admin_users_path, method: "get", local: true, class: "mb-4 flex gap-4") do |form| %>
+    <div>
+      <%= form.label :id, "ID", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.number_field :id, value: params[:id], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", id: "search-id", min: 2 %>
     </div>
+    <div>
+      <%= form.label :search, "Email or Name", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :search, value: params[:search], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", id: "search-input" %>
+    </div>
+    <div>
+  <%= form.label :role, "Role", class: "block text-sm font-medium text-gray-700" %>
+  <%= form.select :role, [['Admin', 'admin'], ['User', 'user']], { prompt: 'Select Role' }, { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", id: "search-role" } do %>
+    <% if params[:role] == 'admin' %>
+      <option value="admin" selected="selected">Admin</option>
+      <option value="user">User</option>
+    <% elsif params[:role] == 'user' %>
+      <option value="admin">Admin</option>
+      <option value="user" selected="selected">User</option>
+    <% else %>
+      <option value="admin">Admin</option>
+      <option value="user">User</option>
     <% end %>
+  <% end %>
+</div>
+
+
+
+
+    <div class="flex items-end gap-1">
+      <%= form.submit "Filter", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 cursor-pointer", style: "background-color: #3b606f; color: #e4ebe8;" %>
+      <% if params[:id].present? || params[:search].present? || params[:role].present? %>
+        <%= link_to "Clear", admin_users_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 cursor-pointer", style: "background-color: #e4ebe8; color: #3b606f;" %>
+      <% end %>
+    </div>
+  <% end %>
+    </div>
   </div>
 
   
@@ -22,56 +53,75 @@
           <thead class="bg-white border-b">
             <tr>
               <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-                <div class="flex items-center gap-2">
-                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center" do %>
-                  <span>ID<span>
+                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'id_asc' || params[:order].blank? ? 'id_desc' : 'id_asc')), class: "flex items-center justify-between" do %>
+                  <span>ID</span>
                   <% if params[:order] == 'id_asc' || params[:order].blank? %>
-                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                    <i class="fas fa-arrow-down text-sm text-gray-500"></i>
                   <% else %>
-                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                    <i class="fas fa-arrow-up text-sm text-gray-500"></i>
                   <% end %>
                   <% end %>
-                </div>
+
               </th>
               <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-                <div class="flex items-center gap-2">
-                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'email_asc' || params[:order].blank? ? 'email_desc' : 'email_asc')), class: "flex items-center" do %>
-                  <span>Email<span>
+
+                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'email_asc' || params[:order].blank? ? 'email_desc' : 'email_asc')), class: "flex items-center justify-between" do %>
+                  <span>Email</span>
                   <% if params[:order] == 'email_asc' || params[:order].blank? %>
-                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                    <i class="fas fa-arrow-down text-sm text-gray-500"></i>
                   <% else %>
-                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                    <i class="fas fa-arrow-up text-sm text-gray-500"></i>
                   <% end %>
                   <% end %>
-                </div>
+
               </th>
               <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">
-                <div class="flex items-center gap-2">
-                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'name_asc' || params[:order].blank? ? 'name_desc' : 'name_asc')), class: "flex items-center" do %>
-                  <span>Name<span>
+
+                  <%= link_to url_for(params.permit(:page).merge(order: params[:order] == 'name_asc' || params[:order].blank? ? 'name_desc' : 'name_asc')), class: "flex items-center justify-between" do %>
+                  <span>Name</span>
                   <% if params[:order] == 'name_asc' || params[:order].blank? %>
-                    <i class="ml-1 fas fa-arrow-down text-sm text-gray-500"></i>
+                    <i class="fas fa-arrow-down text-sm text-gray-500"></i>
                   <% else %>
-                    <i class="ml-1 fas fa-arrow-up text-sm text-gray-500"></i>
+                    <i class="fas fa-arrow-up text-sm text-gray-500"></i>
                   <% end %>
                   <% end %>
-                </div>
+
               </th>
-              <th scope="col" class="w-1/4 text-sm font-medium text-gray-800 px-6 py-4 text-left">Mobile Number</th>
               <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">Admin Privilege</th>
+              <th scope="col" class="w-1/6 text-sm font-medium text-gray-800 px-6 py-4 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
             <% @admin_users.each do |user| %>
-              <tr class="bg-gray-50 border-b">
-                <td class="px-6 py-4 text-sm font-medium text-gray-800 underline">
-                  <%= link_to user.id, admin_user_path(user) %>
-                </td>
+              <tr class="bg-gray-50 border-b cursor-pointer" data-url="<%= admin_user_path(user) %>">
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= user.id %></td>
                 <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= user.email %></td>
                 <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= user.first_name %> <%= user.last_name %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= user.mobile_number %></td>
-                <td class="px-6 py-4 text-sm font-medium text-gray-800">
-                  <%= user.admin ? 'Yes' : 'No' %>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800"><%= user.admin ? 'Yes' : 'No' %></td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-800 relative">
+                  <div class="flex justify-center items-center">
+                    <div class= "flex flex-col">
+                    <button class="rounded-full focus:outline-none focus:ring-0 focus:ring-blue-500 flex items-center mt-2" id="options-menu-<%= user.id %>" aria-haspopup="true" aria-expanded="false">
+                      <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 6a2 2 0 100-4 2 2 0 000 4zM2 6a2 2 0 100-4 2 2 0 000 4zm16 0a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                      </svg>
+                    </button>
+
+                    <div class="absolute bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 hidden mt-8 left-4 z-10">
+
+                      <% unless current_user.id != 1 %>
+                      <div class="mt-2 inline-block">
+                        <% if user.admin? %>
+                          <%= button_to "Remove Admin Privilege", toggle_admin_admin_user_path(user), method: :patch, class: "block text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: "menuitem", data: { turbolinks: false } %>
+                        <% else %>
+                          <%= button_to "Give Admin Privilege", toggle_admin_admin_user_path(user), method: :patch, class: "block text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", role: "menuitem", data: { turbolinks: false } %>
+                        <% end %>
+                      </div>
+                      <% end %>
+                      <%= button_to "Delete", admin_user_path(user), method: :delete, data: { confirm: "Are you sure you want to delete this user?" }, class: "block w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 mt-1", role: "menuitem", data: { turbolinks: false } %>
+                    </div>
+                    </div>
+                  </div>
                 </td>
               </tr>
             <% end %>
@@ -80,7 +130,7 @@
       </div>
     </div>
     <div class="pagination flex justify-end mt-4">
-      <% if @admin_users.total_pages > 1 %>
+       <% if @admin_users.total_pages > 1 %>
         <ul class="flex items-center">
           <% if @admin_users.current_page > 1 %>
             <li><%= link_to "« Previous", url_for(page: @admin_users.current_page - 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
@@ -90,7 +140,7 @@
 
           <% @admin_users.total_pages.times do |page| %>
             <% if @admin_users.current_page == page + 1 %>
-              <li><span class="px-3 py-1 bg-blue-600 text-white rounded-md mr-2"><%= page + 1 %></span></li>
+              <li><span class="px-3 py-1 rounded-md mr-2" style="background-color: #3b606f; color: #e4ebe8;"><%= page + 1 %></span></li>
             <% else %>
               <li><%= link_to page + 1, url_for(page: page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
             <% end %>
@@ -106,3 +156,26 @@
     </div>
   </div>
 </div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const rows = document.querySelectorAll("tr[data-url]");
+  const buttons = document.querySelectorAll("[id^='options-menu-']");
+
+  buttons.forEach(button => {
+    button.addEventListener("click", function(event) {
+      event.stopPropagation(); // Prevents the click event from reaching the row
+      const menu = this.nextElementSibling;
+      menu.classList.toggle("hidden");
+    });
+  });
+
+  rows.forEach(row => {
+    row.addEventListener("click", function() {
+      window.location.href = this.dataset.url;
+    });
+  });
+});
+
+</script>

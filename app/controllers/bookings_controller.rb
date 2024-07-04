@@ -71,6 +71,7 @@ def create
 
   respond_to do |format|
     if @booking.save
+      @booking.send_booking_email
       format.html { redirect_to booking_url(@booking) }
       format.json { render :show, status: :created, location: @booking }
     else
@@ -78,7 +79,6 @@ def create
       @hotel = Hotel.find_by(id: params[:booking][:hotel_id])
       @booking.booked_name = "#{current_user.first_name} #{current_user.last_name}"
       @booking.booked_number = current_user.mobile_number # Adjust based on your actual attribute name
-
       format.html { render :new, status: :unprocessable_entity }
       format.json { render json: @booking.errors, status: :unprocessable_entity }
     end
@@ -104,7 +104,7 @@ end
     @booking.destroy!
 
     respond_to do |format|
-      format.html { redirect_to bookings_url, notice: "Booking was successfully destroyed." }
+      format.html { redirect_to bookings_url, notice: "Booking was successfully deleted." }
       format.json { head :no_content }
     end
   end

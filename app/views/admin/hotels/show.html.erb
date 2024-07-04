@@ -7,7 +7,7 @@
     <%= render @admin_hotel %>
 
     <div class="my-5">
-      <h2 class="font-medium text-lg mb-2">Current Photos:</h2>
+      <strong class="block font-medium mb-1">Current Photos:</strong>
       
       <% if @admin_hotel.images.any? %>
         <div class="flex flex-wrap gap-4">
@@ -20,12 +20,16 @@
       <% end %>
     </div>
 
+    
+    <div class="flex justify-between mt-4 my-5">
+      <%= link_to "Back to hotels", admin_hotels_path, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+      
+      <div class="flex ml-4">
+        <%= link_to "Edit this hotel", edit_admin_hotel_path(@admin_hotel), class: "mr-2 rounded-lg py-3 px-5 inline-block font-medium", style: "background-color: #3b606f; color: #e4ebe8;" %>
 
+        <%= button_to "Delete this hotel", admin_hotel_path(@admin_hotel), method: :delete, class: "rounded-lg py-3 px-5 font-medium", style: "background-color: #e4ebe8; color: #3b606f;" %>
 
-    <%= link_to "Edit this hotel", edit_admin_hotel_path(@admin_hotel), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <div class="inline-block ml-2">
-      <%= button_to "Destroy this hotel", admin_hotel_path(@admin_hotel), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+      </div>
     </div>
-    <%= link_to "Back to hotels", admin_hotels_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
   </div>
 </div>

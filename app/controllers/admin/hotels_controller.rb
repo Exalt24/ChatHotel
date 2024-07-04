@@ -10,6 +10,10 @@ class Admin::HotelsController < AdminController
       @admin_hotels = @admin_hotels.where("LOWER(name) LIKE :search OR LOWER(location) LIKE :search", search: "%#{search_term}%")
     end
 
+    if params[:id].present?
+      @admin_hotels = Hotel.where(id: params[:id])
+    end
+
     # Sort hotels by name ascending or descending based on params[:order]
     if params[:order] == "name_asc"
       @admin_hotels = @admin_hotels.order(name: :asc)
@@ -103,7 +107,7 @@ class Admin::HotelsController < AdminController
     @admin_hotel.destroy!
 
     respond_to do |format|
-      format.html { redirect_to admin_hotels_url, notice: "Hotel was successfully destroyed." }
+      format.html { redirect_to admin_hotels_url, notice: "Hotel was successfully deleted." }
       format.json { head :no_content }
     end
   end

@@ -1,4 +1,4 @@
- <h1 class="font-bold text-4xl">Dashboard</h1>
+<h1 class="font-bold text-4xl">Dashboard</h1>
 
 <div class="mt-8 w-full max-w-6xl">
 
@@ -6,44 +6,54 @@
 
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
     <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-r from-gray-400 to-gray-300">
-      <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2 text-white">Customers</div>
-        <p class="text-white text-base">
-          <%= @customers.count %>
-        </p>
-      </div>
+      <%= link_to admin_users_path(role: 'user') do %>
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2 text-white">Customers</div>
+          <p class="text-white text-base">
+            <%= @customers.count %>
+          </p>
+        </div>
+      <% end %>
     </div>
     <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-r from-gray-400 to-gray-300">
-      <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2 text-white">Admins</div>
-        <p class="text-white text-base">
-          <%= @admins.count %>
-        </p>
-      </div>
+      <%= link_to admin_users_path(role: 'admin') do %>
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2 text-white">Admins</div>
+          <p class="text-white text-base">
+            <%= @admins.count %>
+          </p>
+        </div>
+      <% end %>
     </div>
     <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-r from-gray-400 to-gray-300">
-      <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2 text-white">Confirmed Bookings</div>
-        <p class="text-white text-base">
-          <%= @confirmed_bookings.count %>
-        </p>
-      </div>
+      <%= link_to admin_bookings_path(status: 'confirmed') do %>
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2 text-white">Confirmed Bookings</div>
+          <p class="text-white text-base">
+            <%= @confirmed_bookings.count %>
+          </p>
+        </div>
+      <% end %>
     </div>
     <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-r from-gray-400 to-gray-300">
-      <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2 text-white">Cancelled Bookings</div>
-        <p class="text-white text-base">
-          <%= @cancelled_bookings.count %>
-        </p>
-      </div>
+      <%= link_to admin_bookings_path(status: 'cancelled') do %>
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2 text-white">Cancelled Bookings</div>
+          <p class="text-white text-base">
+            <%= @cancelled_bookings.count %>
+          </p>
+        </div>
+      <% end %>
     </div>
     <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-r from-gray-400 to-gray-300">
-      <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2 text-white">Hotel Listings</div>
-        <p class="text-white text-base">
-          <%= @hotels.count %>
-        </p>
-      </div>
+      <%= link_to admin_hotels_path do %>
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2 text-white">Hotel Listings</div>
+          <p class="text-white text-base">
+            <%= @hotels.count %>
+          </p>
+        </div>
+      <% end %>
     </div>
   </div>
 

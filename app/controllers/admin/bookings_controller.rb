@@ -1,9 +1,13 @@
 class Admin::BookingsController < AdminController
-    
+
     before_action :set_booking, only: [ :show, :toggle_status, :destroy ]
 
   def index
     @admin_bookings = Booking.all
+
+    if params[:id].present?
+      @admin_bookings = Booking.where(id: params[:id])
+    end
 
     if params[:start_date].present? && params[:end_date].present?
       start_date = Date.parse(params[:start_date])
@@ -27,6 +31,9 @@ class Admin::BookingsController < AdminController
     @admin_bookings = @admin_bookings.where(user_id: params[:user_id]) if params[:user_id].present?
     @admin_bookings = @admin_bookings.where(hotel_id: params[:hotel_id]) if params[:hotel_id].present?
 
+    if params[:status].present?
+      @admin_bookings = @admin_bookings.where(status: params[:status])
+    end
 
     if params[:order] == "user_id_asc"
       @admin_bookings = @admin_bookings.order(user_id: :asc)
@@ -40,10 +47,6 @@ class Admin::BookingsController < AdminController
       @admin_bookings = @admin_bookings.order(hotel_id: :asc)
     elsif params[:order] == "hotel_id_desc"
       @admin_bookings = @admin_bookings.order(hotel_id: :desc)
-    elsif params[:order] == "booked_name_asc"
-      @admin_bookings = @admin_bookings.order(booked_name: :asc)
-    elsif params[:order] == "booked_name_desc"
-      @admin_bookings = @admin_bookings.order(booked_name: :desc)
     else
       @admin_bookings = @admin_bookings.order(id: :asc)
     end
@@ -57,7 +60,9 @@ class Admin::BookingsController < AdminController
   def toggle_status
     new_status = @admin_booking.status == "confirmed" ? "cancelled" : "confirmed"
     if @admin_booking.update(status: new_status)
-      redirect_to admin_booking_path(@admin_booking), notice: "Booking status was successfully updated."
+      redirect_back fallback_location: admin_booking_path(@admin_booking), notice: "Booking status was successfully updated."
+    else
+      redirect_to admin_booking_path(@admin_booking), alert: "Failed to update booking status."
     end
   end
 

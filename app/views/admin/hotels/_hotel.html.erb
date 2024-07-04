@@ -19,18 +19,17 @@
     <%= hotel.contact_details %>
   </p>
 
-  <p class="my-5">
-    <% if hotel.amenities.present? %>
-  <h3 class="text-lg font-semibold mb-2">Amenities</h3>
-  <ul class="text-gray-700">
-    <% hotel.amenities.split(',').each do |amenity| %>
-      <li><%= amenity.strip %></li>
-    <% end %>
-  </ul>
-<% end %>
-
+  <p class="my-3">
+    <strong class="block font-medium mb-1">Amenities:</strong>
+      <% if hotel.amenities.present? %>
+        <% hotel.amenities.split(',').each do |amenity| %>
+          <li><%= amenity.strip %></li>
+        <% end %>
+      <% else %>
+        <p>No amenities listed.</p>
+      <% end %>
   </p>
-
+  
   <% if action_name != "show" %>
     <%= link_to "Show this hotel", [:admin, hotel], class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
     <%= link_to "Edit this hotel", edit_admin_hotel_path(hotel), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>

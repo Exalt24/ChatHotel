@@ -4,6 +4,10 @@ class Admin::UsersController < AdminController
     def index
       @admin_users = User.where.not(id: [ current_user.id, 1 ])
 
+      if params[:id].present?
+        @admin_users = User.where(id: params[:id])
+      end
+
       if params[:search].present?
         search_term = params[:search].downcase
         @admin_users = @admin_users.where("LOWER(first_name) LIKE :search OR LOWER(last_name) LIKE :search OR LOWER(email) LIKE :search", search: "%#{search_term}%")
@@ -26,6 +30,10 @@ class Admin::UsersController < AdminController
         @admin_users = @admin_users.order(id: :asc)
       end
 
+      if params[:role].present?
+        @admin_users = @admin_users.where(admin: (params[:role] == "admin"))
+      end
+
       @admin_users = @admin_users.paginate(page: params[:page], per_page: 10)
     end
 
@@ -37,7 +45,7 @@ class Admin::UsersController < AdminController
       @admin_user.destroy!
 
       respond_to do |format|
-        format.html { redirect_to admin_users_url, notice: "User was successfully destroyed." }
+        format.html { redirect_to admin_users_url, notice: "User was successfully deleted." }
         format.json { head :no_content }
       end
     end
@@ -45,15 +53,10 @@ class Admin::UsersController < AdminController
     def toggle_admin
       if @admin_user.admin?
         @admin_user.update(admin: false)
-        message = "Admin privileges were successfully removed."
+        redirect_back fallback_location: admin_user_path(@admin_user), notice: "Admin privileges were successfully removed."
       else
         @admin_user.update(admin: true)
-        message = "User was successfully given admin privileges."
-      end
-
-      respond_to do |format|
-        format.html { redirect_to admin_user_path(@admin_user), notice: message }
-        format.json { render :show, status: :ok, location: @admin_user }
+        redirect_back fallback_location: admin_user_path(@admin_user), notice: "User was successfully given admin privileges."
       end
     end
 
