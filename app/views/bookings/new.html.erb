@@ -33,7 +33,7 @@
 
       <div class="mb-4">
         <%= form.label :booked_name, "Booked Name", class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= text_field_tag :booked_name, @booking.booked_name, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", readonly: true %>
+        <%= text_field_tag :booked_name, "#{@current_user.first_name} #{@current_user.last_name}", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", readonly: true %>
       </div>
 
       <div class="mb-4">
@@ -41,15 +41,27 @@
         <%= text_field_tag :booked_number, @booking.booked_number, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", readonly: true %>
       </div>
 
-      <div class="mb-4">
-        <%= form.label :start_date, "Check-in Date", class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.date_field :start_date, class: "check-in-date shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+        <div class="flex items-center gap-2">
+          <div class="mb-4">
+        <%= form.label :start_date, "Start Date", class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= text_field_tag :start_date, nil, class: "check-in-date shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", readonly: true %>
+        </div>
+        <div class="mb-4">
+        <%= form.label :end_date, "End Date", class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= text_field_tag :end_date, nil, class: "check-out-date shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", readonly: true %>
+        </div>
+      </div>
+
+      <div>
+          <div id="date-picker-container"></div>
       </div>
 
       <div class="mb-4">
-        <%= form.label :end_date, "Check-out Date", class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.date_field :end_date, class: "check-out-date shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+        <button type="button" id="change-date" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+          Change Date
+        </button>
       </div>
+
 
       <div class="mb-6">
         <%= form.label :room_type, "Room Type", class: "block text-gray-700 text-sm font-bold mb-2" %>
@@ -70,7 +82,6 @@
       <div class="flex items-center justify-between">
         <%= link_to "Back to Hotels", hotels_path, class: "bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
         <%= form.submit 'Book Room', class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline", data: { confirm: 'Are you sure you want to book this room?' } %>
-      </div>
       </div>
 
     <% end %>
@@ -107,86 +118,121 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const startDateField = document.querySelector('.check-in-date');
-    const endDateField = document.querySelector('.check-out-date');
-    const roomTypeField = document.querySelector('.room-type');
-    const calculatePriceButton = document.getElementById('calculate-price');
-    const roomPriceSpan = document.getElementById('room-price');
-    const priceModal = document.getElementById('priceModal');
-    const modalTotalCost = document.getElementById('modal-total-cost');
-    const closeModalButton = document.getElementById('close-modal');
+document.addEventListener('DOMContentLoaded', function() {
+  const startDateField = document.querySelector('.check-in-date');
+  const endDateField = document.querySelector('.check-out-date');
+  const datePickerContainer = document.getElementById('date-picker-container');
+  const roomTypeField = document.querySelector('.room-type');
+  const calculatePriceButton = document.getElementById('calculate-price');
+  const roomPriceSpan = document.getElementById('room-price');
+  const priceModal = document.getElementById('priceModal');
+  const modalTotalCost = document.getElementById('modal-total-cost');
+  const closeModalButton = document.getElementById('close-modal');
+  const changeDateButton = document.getElementById('change-date'); // New button for changing dates
 
-    function updateRoomPrice() {
-      const roomType = roomTypeField.value;
-      const hotelId = '<%= @hotel.id %>';
+  let fp; // Flatpickr instance
 
-      fetch('/hotels/' + hotelId + '/room_price', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify({ room_type: roomType })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.room_price !== undefined) {
-          roomPriceSpan.textContent = 'Price: $' + data.room_price;
-        } else if (data.error) {
-          alert('Error fetching room price: ' + data.error);
+  // Function to initialize Flatpickr
+  function initializeFlatpickr() {
+    fp = flatpickr(datePickerContainer, {
+      mode: 'range',
+      dateFormat: 'Y-m-d',
+      minDate: 'today',
+      onChange: function(selectedDates, dateStr, instance) {
+        if (selectedDates.length === 2) {
+          startDateField.value = fp.formatDate(selectedDates[0], 'Y-m-d');
+          endDateField.value = fp.formatDate(selectedDates[1], 'Y-m-d');
         }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-    }
-
-    function calculatePrice() {
-      const startDate = startDateField.value;
-      const endDate = endDateField.value;
-      const roomType = roomTypeField.value;
-      const hotelId = '<%= @hotel.id %>';
-
-      if (startDate && endDate && roomType) {
-        fetch('<%= calculate_price_bookings_path %>', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-          },
-          body: JSON.stringify({
-            start_date: startDate,
-            end_date: endDate,
-            room_type: roomType,
-            hotel_id: hotelId
-          })
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.total_cost !== undefined) {
-            modalTotalCost.textContent = data.total_cost;
-            priceModal.classList.remove('hidden');
-          } else if (data.error) {
-            alert('Error calculating price: ' + data.error);
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      } else {
-        alert('Please fill in all fields.');
       }
-    }
-
-    roomTypeField.addEventListener('change', updateRoomPrice);
-    calculatePriceButton.addEventListener('click', calculatePrice);
-
-    closeModalButton.addEventListener('click', function() {
-      priceModal.classList.add('hidden');
     });
+    
+    fp.open(); // Ensure Flatpickr opens after initialization
+  }
 
-    // Initial room price update
-    updateRoomPrice();
+ // Event listener for the "Change Date" button
+changeDateButton.addEventListener('click', function() {
+  // Destroy the existing Flatpickr instance if it exists
+  if (fp) {
+    fp.destroy();
+  }
+  // Initialize Flatpickr again
+  initializeFlatpickr();
+});
+
+
+  function updateRoomPrice() {
+    const roomType = roomTypeField.value;
+    const hotelId = '<%= @hotel.id %>';
+
+    fetch('/hotels/' + hotelId + '/room_price', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ room_type: roomType })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.room_price !== undefined) {
+        roomPriceSpan.textContent = 'Price: $' + data.room_price;
+      } else if (data.error) {
+        alert('Error fetching room price: ' + data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
+
+ function calculatePrice() {
+  const startDate = startDateField.value;
+  const endDate = endDateField.value;
+  const roomType = roomTypeField.value;
+  const hotelId = '<%= @hotel.id %>';
+
+  if (startDate && endDate && roomType) {
+    fetch('<%= calculate_price_bookings_path %>', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({
+        start_date: startDate,
+        end_date: endDate,
+        room_type: roomType,
+        hotel_id: hotelId
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.total_cost !== undefined) {
+        modalTotalCost.textContent = data.total_cost;
+        priceModal.classList.remove('hidden');
+      } else if (data.error) {
+        alert('Error calculating price: ' + data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  } else {
+    alert('Please fill in all fields.');
+  }
+}
+
+
+  roomTypeField.addEventListener('change', updateRoomPrice);
+  calculatePriceButton.addEventListener('click', calculatePrice);
+
+  closeModalButton.addEventListener('click', function() {
+    priceModal.classList.add('hidden');
   });
+
+  // Initial room price update
+  updateRoomPrice();
+});
+
+
 </script>
