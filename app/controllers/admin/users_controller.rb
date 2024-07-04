@@ -2,13 +2,13 @@ class Admin::UsersController < AdminController
     before_action :set_admin_user, only: [ :show, :destroy, :toggle_admin ]
 
     def index
-      @admin_users = User.where.not(id: [current_user.id, 1])
-    
+      @admin_users = User.where.not(id: [ current_user.id, 1 ])
+
       if params[:search].present?
         search_term = params[:search].downcase
         @admin_users = @admin_users.where("LOWER(first_name) LIKE :search OR LOWER(last_name) LIKE :search OR LOWER(email) LIKE :search", search: "%#{search_term}%")
       end
-    
+
       case params[:order]
       when "name_asc"
         @admin_users = @admin_users.order(first_name: :asc, last_name: :asc)
@@ -25,10 +25,10 @@ class Admin::UsersController < AdminController
       else
         @admin_users = @admin_users.order(id: :asc)
       end
-    
+
       @admin_users = @admin_users.paginate(page: params[:page], per_page: 10)
     end
-    
+
 
     def show
     end
