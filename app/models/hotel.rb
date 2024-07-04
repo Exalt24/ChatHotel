@@ -30,6 +30,7 @@ class Hotel < ApplicationRecord
     end
 
     def positive_room_prices
+      if single_room_price.present? && double_room_price.present? && suite_price.present?
       if single_room_price <= 0
         errors.add(:single_room_price, "must be greater than 0")
       end
@@ -41,5 +42,6 @@ class Hotel < ApplicationRecord
       if suite_price <= 0
         errors.add(:suite_price, "must be greater than 0")
       end
-    end
+      end
+  end
 end
