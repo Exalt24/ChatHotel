@@ -64,6 +64,8 @@ class BookingsController < ApplicationController
 def create
   @booking = Booking.new(booking_params)
   @booking.user_id = current_user.id
+  @booking.start_date = params[:start_date]
+  @booking.end_date = params[:end_date]
   @booking.booked_name = "#{current_user.first_name} #{current_user.last_name}"
   @booking.booked_number = current_user.mobile_number # Adjust based on your actual attribute name
 
