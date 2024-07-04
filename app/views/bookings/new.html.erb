@@ -74,10 +74,13 @@
       
 
       <div class="mb-4">
-        <button type="button" id="calculate-price" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-          Calculate Price
-        </button> 
+        <%= form.label :total_cost, "Total Cost", class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <div class="flex items-center gap-2">
+          <span class="currency-symbol">$</span>
+          <%= form.text_field :total_cost, id: "total-cost", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", readonly: true %>
+        </div>
       </div>
+
 
       <div class="flex items-center justify-between">
         <%= link_to "Back to Hotels", hotels_path, class: "bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
@@ -88,47 +91,14 @@
   </div>
 </div>
 
-<!-- Modal for displaying the total cost -->
-<div id="priceModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-        <div class="sm:flex sm:items-start">
-          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-              Total Cost
-            </h3>
-            <div class="mt-2">
-              <p class="text-sm text-gray-500">
-                The total cost for your stay is: <span id="modal-total-cost">0</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" id="close-modal">
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const startDateField = document.querySelector('.check-in-date');
   const endDateField = document.querySelector('.check-out-date');
   const datePickerContainer = document.getElementById('date-picker-container');
   const roomTypeField = document.querySelector('.room-type');
-  const calculatePriceButton = document.getElementById('calculate-price');
   const roomPriceSpan = document.getElementById('room-price');
-  const priceModal = document.getElementById('priceModal');
-  const modalTotalCost = document.getElementById('modal-total-cost');
-  const closeModalButton = document.getElementById('close-modal');
-  const changeDateButton = document.getElementById('change-date'); // New button for changing dates
+  const changeDateButton = document.getElementById('change-date');
 
   let fp; // Flatpickr instance
 
@@ -142,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedDates.length === 2) {
           startDateField.value = fp.formatDate(selectedDates[0], 'Y-m-d');
           endDateField.value = fp.formatDate(selectedDates[1], 'Y-m-d');
+          calculatePrice(); // Update total_cost when dates change
         }
       }
     });
@@ -149,17 +120,15 @@ document.addEventListener('DOMContentLoaded', function() {
     fp.open(); // Ensure Flatpickr opens after initialization
   }
 
- // Event listener for the "Change Date" button
-changeDateButton.addEventListener('click', function() {
-  // Destroy the existing Flatpickr instance if it exists
-  if (fp) {
-    fp.destroy();
-  }
-  // Initialize Flatpickr again
-  initializeFlatpickr();
-});
+  // Event listener for the "Change Date" button
+  changeDateButton.addEventListener('click', function() {
+    if (fp) {
+      fp.destroy(); // Destroy existing Flatpickr instance
+    }
+    initializeFlatpickr(); // Reinitialize Flatpickr on button click
+  });
 
-
+  // Function to update room price based on selected room type
   function updateRoomPrice() {
     const roomType = roomTypeField.value;
     const hotelId = '<%= @hotel.id %>';
@@ -176,6 +145,7 @@ changeDateButton.addEventListener('click', function() {
     .then(data => {
       if (data.room_price !== undefined) {
         roomPriceSpan.textContent = 'Price: $' + data.room_price;
+        calculatePrice(); // Update total_cost when room type changes
       } else if (data.error) {
         alert('Error fetching room price: ' + data.error);
       }
@@ -185,12 +155,15 @@ changeDateButton.addEventListener('click', function() {
     });
   }
 
- function calculatePrice() {
+  // Function to calculate total cost based on selected dates and room type
+  // Function to calculate total cost based on selected dates and room type
+function calculatePrice() {
   const startDate = startDateField.value;
   const endDate = endDateField.value;
   const roomType = roomTypeField.value;
   const hotelId = '<%= @hotel.id %>';
 
+  // Check if startDate, endDate, and roomType are present
   if (startDate && endDate && roomType) {
     fetch('<%= calculate_price_bookings_path %>', {
       method: 'POST',
@@ -208,31 +181,30 @@ changeDateButton.addEventListener('click', function() {
     .then(response => response.json())
     .then(data => {
       if (data.total_cost !== undefined) {
-        modalTotalCost.textContent = data.total_cost;
-        priceModal.classList.remove('hidden');
-      } else if (data.error) {
-        alert('Error calculating price: ' + data.error);
+        document.getElementById('total-cost').value = data.total_cost;
+      } else {
+        document.getElementById('total-cost').value = 0; // Set default value if total_cost is not returned
       }
     })
     .catch(error => {
       console.error('Error:', error);
     });
   } else {
-    alert('Please fill in all fields.');
+    alert("Please fill in all the fields!")
+    document.getElementById('total-cost').value = 0;
   }
 }
 
 
+  // Event listeners for changes in start date, end date, and room type
+  startDateField.addEventListener('change', calculatePrice);
+  endDateField.addEventListener('change', calculatePrice);
   roomTypeField.addEventListener('change', updateRoomPrice);
-  calculatePriceButton.addEventListener('click', calculatePrice);
-
-  closeModalButton.addEventListener('click', function() {
-    priceModal.classList.add('hidden');
-  });
 
   // Initial room price update
   updateRoomPrice();
 });
+
 
 
 </script>
