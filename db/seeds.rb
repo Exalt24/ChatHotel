@@ -36,6 +36,17 @@ User.create!(
   activated_at: Time.zone.now
 )
 
+User.create!(
+  first_name: "Daniel",
+  last_name: "Cruz",
+  email: "dcruz@up.edu.ph",
+  mobile_number: Faker::Base.regexify(/^(08|09)\d{9}$/),
+  password: "daxdax12345",
+  password_confirmation: "daxdax12345",
+  activated: true,
+  activated_at: Time.zone.now
+)
+
 # Create additional customer users
 5.times do
   User.create!(
