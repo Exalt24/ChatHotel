@@ -54,7 +54,7 @@
       <% if @hotels.total_pages > 1 %>
         <ul class="flex items-center">
           <% if @hotels.current_page > 1 %>
-            <li><%= link_to "« Previous", url_for(page: @hotels.current_page - 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+            <li><%= link_to "« Previous", url_for(params.permit!.merge(page: @hotels.current_page - 1)), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
           <% else %>
             <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md mr-2">« Previous</span></li>
           <% end %>
@@ -63,12 +63,12 @@
             <% if @hotels.current_page == page + 1 %>
               <li><span class="px-3 py-1 bg-blue-600 text-white rounded-md mr-2"><%= page + 1 %></span></li>
             <% else %>
-              <li><%= link_to page + 1, url_for(page: page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
+              <li><%= link_to page + 1, url_for(params.permit!.merge(page: page + 1)), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2" %></li>
             <% end %>
           <% end %>
 
           <% if @hotels.current_page < @hotels.total_pages %>
-            <li><%= link_to "Next »", url_for(page: @hotels.current_page + 1), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md ml-2" %></li>
+            <li><%= link_to "Next »", url_for(params.permit!.merge(page: @hotels.current_page + 1)), class: "px-3 py-1 bg-gray-200 text-gray-700 rounded-md ml-2" %></li>
           <% else %>
             <li><span class="px-3 py-1 bg-gray-200 text-gray-400 rounded-md ml-2">Next »</span></li>
           <% end %>
