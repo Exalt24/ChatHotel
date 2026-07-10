@@ -66,10 +66,4 @@ class Admin::UsersController < AdminController
     def set_admin_user
       @admin_user = User.find(params[:id])
     end
-
-    def admin_user_params
-      params.require(:users).permit(
-        :id, :first_name, :last_name, :mobile_number, :admin
-      )
-    end
 end
