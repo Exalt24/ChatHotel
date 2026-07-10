@@ -176,7 +176,7 @@ GEM
     mini_magick (4.13.2)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (6.0.6)
+    minitest (5.25.1)
       drb (~> 2.0)
       prism (~> 1.5)
     msgpack (1.7.2)
