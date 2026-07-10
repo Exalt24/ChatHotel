@@ -143,5 +143,4 @@ end
         puts "Booking found: #{@booking.attributes}"
       end
     end
-
 end

@@ -1,15 +1,21 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  description: MyText
-  location: MyString
-  contact_details: MyString
-  amenities: MyString
+  name: Grand Plaza Hotel
+  description: A comfortable stay in the heart of the city.
+  location: Manila
+  contact_details: "09171234567"
+  amenities: WiFi, Pool, Breakfast
+  single_room_price: 1000
+  double_room_price: 2000
+  suite_price: 3000
 
 two:
-  name: MyString
-  description: MyText
-  location: MyString
-  contact_details: MyString
-  amenities: MyString
+  name: Seaside Resort
+  description: Beachfront rooms with a great view.
+  location: Cebu
+  contact_details: "09181234567"
+  amenities: WiFi, Beach access
+  single_room_price: 1500
+  double_room_price: 2500
+  suite_price: 4000

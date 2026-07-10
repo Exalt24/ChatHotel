@@ -4,14 +4,20 @@ one:
   user: one
   hotel: one
   start_date: 2024-07-01
-  end_date: 2024-07-01
-  room_type: MyString
-  status: MyString
+  end_date: 2024-07-03
+  room_type: single_room
+  status: confirmed
+  total_cost: 3000
+  booked_name: Alice Reyes
+  booked_number: "09171234567"
 
 two:
   user: two
   hotel: two
-  start_date: 2024-07-01
-  end_date: 2024-07-01
-  room_type: MyString
-  status: MyString
+  start_date: 2024-07-05
+  end_date: 2024-07-06
+  room_type: double_room
+  status: confirmed
+  total_cost: 5000
+  booked_name: Bob Santos
+  booked_number: "09181234567"
