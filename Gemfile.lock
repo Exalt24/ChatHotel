@@ -150,9 +150,7 @@ GEM
       activesupport (>= 6.1)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
-    image_processing (1.14.0)
-      mini_magick (>= 4.9.5, < 6)
-      ruby-vips (>= 2.0.17, < 3)
+    image_processing (2.0.2)
     importmap-rails (2.0.1)
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
@@ -316,9 +314,6 @@ GEM
       rubocop-performance
       rubocop-rails
     ruby-progressbar (1.13.0)
-    ruby-vips (2.2.2)
-      ffi (~> 1.12)
-      logger
     rubyzip (3.4.1)
     sassc (2.4.0)
       ffi (~> 1.9)
@@ -394,7 +389,7 @@ DEPENDENCIES
   faker
   flatpickr (~> 4.6, >= 4.6.13)
   font-awesome-sass
-  image_processing (~> 1.13)
+  image_processing (~> 2.0)
   importmap-rails
   jbuilder
   mail
