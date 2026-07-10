@@ -26,7 +26,7 @@ class UserMailer < ApplicationMailer
     rendered_text = text_renderer.result(binding)
 
     mail = Mail.new do
-      from    "danielalexiscruz2469@gmail.com"
+      from    ENV["SMTP_USERNAME"]
       to      user.email
       subject subject_text
 
@@ -40,14 +40,18 @@ class UserMailer < ApplicationMailer
       end
     end
 
-    mail.delivery_method :smtp, {
-      address:              "smtp.gmail.com",
-      port:                 587,
-      user_name:            "danielalexiscruz2469@gmail.com",
-      password:             "illyxjfjagbvksnk",
-      authentication:       "plain",
-      enable_starttls_auto: true
-    }
+    if Rails.env.test?
+      mail.delivery_method :test
+    else
+      mail.delivery_method :smtp, {
+        address:              ENV.fetch("SMTP_ADDRESS", "smtp.gmail.com"),
+        port:                 ENV.fetch("SMTP_PORT", 587),
+        user_name:            ENV["SMTP_USERNAME"],
+        password:             ENV["SMTP_PASSWORD"],
+        authentication:       "plain",
+        enable_starttls_auto: true
+      }
+    end
 
     mail.deliver
   end
