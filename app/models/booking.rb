@@ -3,12 +3,12 @@ class Booking < ApplicationRecord
   belongs_to :user
   belongs_to :hotel
 
-  enum status: {
+  enum :status, {
     confirmed: "confirmed",
     cancelled: "cancelled"
   }
 
-  enum room_type: {
+  enum :room_type, {
     single_room: "single_room",
     double_room: "double_room",
     suite: "suite"
