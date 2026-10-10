@@ -10,10 +10,10 @@ User.destroy_all
 admin_user = User.new(
   first_name: "Admin",
   last_name: "Admin",
-  email: "admin@gmail.com",
+  email: "admin@example.com",
   mobile_number: Faker::Base.regexify(/^(08|09)\d{9}$/),
-  password: "daxdax12345",
-  password_confirmation: "daxdax12345",
+  password: "password",
+  password_confirmation: "password",
   admin: true,
   activated: true,
   activated_at: Time.zone.now
@@ -26,23 +26,23 @@ else
 end
 
 User.create!(
-  first_name: "Daniel",
-  last_name: "Cruz",
-  email: "danielalexispadolina@gmail.com",
+  first_name: "Demo",
+  last_name: "Guest",
+  email: "guest@example.com",
   mobile_number: Faker::Base.regexify(/^(08|09)\d{9}$/),
-  password: "daxdax12345",
-  password_confirmation: "daxdax12345",
+  password: "password",
+  password_confirmation: "password",
   activated: true,
   activated_at: Time.zone.now
 )
 
 User.create!(
-  first_name: "Daniel",
-  last_name: "Cruz",
-  email: "dcruz@up.edu.ph",
+  first_name: "Demo",
+  last_name: "Reviewer",
+  email: "reviewer@example.com",
   mobile_number: Faker::Base.regexify(/^(08|09)\d{9}$/),
-  password: "daxdax12345",
-  password_confirmation: "daxdax12345",
+  password: "password",
+  password_confirmation: "password",
   activated: true,
   activated_at: Time.zone.now
 )
