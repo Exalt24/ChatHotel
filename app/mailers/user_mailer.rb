@@ -26,7 +26,7 @@ class UserMailer < ApplicationMailer
     rendered_text = text_renderer.result(binding)
 
     mail = Mail.new do
-      from    ENV["SMTP_USERNAME"]
+      from    ENV["SMTP_USERNAME"].presence || "noreply@chathotel.local"
       to      user.email
       subject subject_text
 
@@ -42,6 +42,10 @@ class UserMailer < ApplicationMailer
 
     if Rails.env.test?
       mail.delivery_method :test
+    elsif ENV["SMTP_USERNAME"].blank? && !Rails.env.production?
+      # No SMTP credentials in a local setup: write the email to the Rails log
+      # instead of failing the request that triggered it.
+      mail.delivery_method :logger, logger: Rails.logger, severity: :info
     else
       mail.delivery_method :smtp, {
         address:              ENV.fetch("SMTP_ADDRESS", "smtp.gmail.com"),

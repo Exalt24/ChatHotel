@@ -1,0 +1,32 @@
+# Local development stack: Rails + PostgreSQL, seeded with demo data on first boot.
+#   docker compose up --build        then open http://localhost:3000
+# Set WEB_PORT to use another host port (WEB_PORT=4700 docker compose up --build).
+# The database is only reachable from the web container and needs no password.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: chathotel
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chathotel -d postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://chathotel@db:5432/hotel_booking_app_development
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+
+volumes:
+  pgdata:

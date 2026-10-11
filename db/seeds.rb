@@ -79,6 +79,14 @@ amenities_list = [
   )
 end
 
+# Weekday surcharges for the Pricing Manager (a fresh database is loaded from
+# schema.rb, so the rows the old migration created are not there)
+{
+  "Monday" => 0, "Tuesday" => 0, "Wednesday" => 0, "Thursday" => 0,
+  "Friday" => 30, "Saturday" => 50, "Sunday" => 20
+}.each do |day, surcharge|
+  DayPriceAdjustment.find_or_initialize_by(day_of_week: day).update!(price_adjustment: surcharge)
+end
 
 # Create bookings for customers
 User.where(admin: false).each do |customer|

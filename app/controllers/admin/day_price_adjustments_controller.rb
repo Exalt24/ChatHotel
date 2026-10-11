@@ -2,7 +2,7 @@ class Admin::DayPriceAdjustmentsController < AdminController
     before_action :set_day_price_adjustment, only: [ :edit, :update ]
 
     def index
-      @admin_day_price_adjustments = DayPriceAdjustment.order(Arel.sql("CASE day_of_week
+      @admin_day_price_adjustments = DayPriceAdjustment.order(Arel.sql("CASE LOWER(day_of_week)
                                     WHEN 'sunday' THEN 0
                                     WHEN 'monday' THEN 1
                                     WHEN 'tuesday' THEN 2

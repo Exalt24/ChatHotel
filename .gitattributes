@@ -7,3 +7,7 @@ db/schema.rb linguist-generated
 vendor/* linguist-vendored
 config/credentials/*.yml.enc diff=rails_credentials
 config/credentials.yml.enc diff=rails_credentials
+
+# Shell scripts and bin stubs must keep LF line endings or they fail inside Linux containers.
+bin/* text eol=lf
+*.sh text eol=lf
