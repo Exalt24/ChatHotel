@@ -11,3 +11,20 @@ config/credentials.yml.enc diff=rails_credentials
 # Shell scripts and bin stubs must keep LF line endings or they fail inside Linux containers.
 bin/* text eol=lf
 *.sh text eol=lf
+# Line endings and binaries, enforced on every machine (autocrlf corrupted PDFs and left shell scripts and Dockerfiles CRLF, 2026-10-13).
+*.bash text eol=lf
+Dockerfile* text eol=lf
+.env* text eol=lf
+*.env text eol=lf
+*.gif binary
+*.png binary
+/Dockerfile text eol=lf
+/bin/brakeman text eol=lf
+/bin/bundle text eol=lf
+/bin/dev text eol=lf
+/bin/docker-entrypoint text eol=lf
+/bin/importmap text eol=lf
+/bin/rails text eol=lf
+/bin/rake text eol=lf
+/bin/rubocop text eol=lf
+/bin/setup text eol=lf
