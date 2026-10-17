@@ -1,10 +1,12 @@
 # ChatHotel
 
+[![CI](https://github.com/Exalt24/ChatHotel/actions/workflows/ci.yml/badge.svg)](https://github.com/Exalt24/ChatHotel/actions/workflows/ci.yml)
+
 ![ChatHotel demo: browse hotels, log in, book a room with a live price quote, get rejected on overlapping dates, then edit a weekday surcharge in the admin panel](docs/demo.gif)
 
 *Recorded on a local Docker stack (Rails + PostgreSQL, seeded demo data). Nothing is deployed right now.*
 
-A hotel booking app with weekday-based pricing, availability-checked bookings, and an admin panel. Built solo in a three-day sprint during my Full Stack Developer internship at ChatGenie.PH (Techstars '23).
+Hotel booking app with weekday pricing, availability-checked bookings and an admin panel, built on Rails. Built solo in a three-day sprint during my Full Stack Developer internship at ChatGenie.PH (Techstars '23).
 
 Guests browse hotels, book a room type for a date range with a live price quote, and leave reviews. Administrators manage hotels, users, bookings, and weekday price adjustments from a separate admin area.
 
