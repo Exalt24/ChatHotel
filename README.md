@@ -12,19 +12,19 @@ Guests browse hotels, book a room type for a date range with a live price quote,
 
 ## Features
 
-- **Weekday pricing.** Admins set a surcharge per day of the week in the Pricing Manager. The quote is the number of days in the stay (both the first and last day count) times the room rate plus the surcharge for the check-in weekday. The booking form fetches the quote from the server whenever the dates or room type change (`PricingHelper`, `BookingsController#calculate_price`).
-- **Availability-checked bookings.** A booking is rejected when its dates overlap a confirmed booking for the same hotel and room type (`no_double_booking` in `app/models/booking.rb`), so each hotel has one room of each type: single, double, suite. Pages update on navigation (Turbo), not by live push.
+- **Weekday pricing.** Admins set a surcharge per day of the week in the Pricing Manager. The quote is the number of days in the stay times the room rate plus the surcharge for the check-in weekday. Both the first and last day count. The booking form fetches the quote from the server whenever the dates or room type change (`PricingHelper`, `BookingsController#calculate_price`).
+- **Availability-checked bookings.** A booking is rejected when its dates overlap a confirmed booking for the same hotel and room type (`no_double_booking` in `app/models/booking.rb`). That works because each hotel has one room of each type: single, double, suite. Pages update on navigation (Turbo), not by live push.
 - **Accounts.** Registration with email activation, session login with "remember me", and password reset.
 - **Reviews.** Logged-in users can leave a 1 to 5 rating and a comment on a hotel.
 - **Admin panel.** Dashboard counts, plus manage hotels (with photo uploads), users (grant or revoke admin), bookings (confirm or cancel), and the seven weekday surcharges. Non-admins are redirected away from `/admin`.
 
 ## Tech Stack
 
-- **Framework:** Ruby on Rails 8 (Ruby 3.3.2), PostgreSQL
-- **Frontend:** server-rendered ERB with Hotwire (Turbo and Stimulus) on an import map, Tailwind CSS, and flatpickr for the date range picker
+- **Framework:** Ruby on Rails 8 (Ruby 3.3.2), PostgreSQL.
+- **Frontend:** server-rendered ERB with Hotwire (Turbo and Stimulus) on an import map, Tailwind CSS, and flatpickr for the date range picker.
 - **Email:** sent over SMTP when `SMTP_USERNAME` and `SMTP_PASSWORD` are set (see `.env.example`). Outside production, emails go to the Rails log unless those credentials are set.
 - **Live updates:** pages update on navigation with Turbo. A channel on the Action Cable that Rails generates is a next step.
-- **CI:** GitHub Actions runs Brakeman, an import map audit, RuboCop, and the test suite
+- **CI:** GitHub Actions runs Brakeman, an import map audit, RuboCop, and the test suite.
 
 ## Run it locally
 
@@ -36,7 +36,7 @@ docker compose up --build
 
 Then open http://localhost:3000. The first start builds the image, creates the database, loads the schema, and seeds it. To use another host port: `WEB_PORT=4700 docker compose up --build`.
 
-The seed data is Faker-generated: 10 hotels, a handful of customers with bookings, and weekday surcharges (Friday 30, Saturday 50, Sunday 20). Two accounts to try, both with the password `password` (demo data for local use only):
+The seed data is Faker-generated. It holds 10 hotels, a handful of customers with bookings, and weekday surcharges (Friday 30, Saturday 50, Sunday 20). Two accounts to try, both with the password `password` (demo data for local use only):
 
 - `guest@example.com` books rooms
 - `admin@example.com` opens the admin panel at `/admin`
@@ -57,7 +57,7 @@ Without Docker you need Ruby 3.3.2 and a local PostgreSQL. Point `DATABASE_URL` 
 
 ## Deployment
 
-The repository includes a production `Dockerfile` and a `render.yaml` for Render, with Active Storage on S3 in production. The Render service that used to host it ran on a free tier, so the demo is the recording above and the local stack.
+The repository includes a production `Dockerfile` and a `render.yaml` for Render, with Active Storage on S3 in production. The Render service that used to host it ran on a free tier. The demo is the recording above and the local stack.
 
 ## Structure
 
@@ -65,4 +65,4 @@ Standard Rails layout. The domain lives in `app/controllers` (bookings, hotels, 
 
 ## Context
 
-This was built in a compressed three-day internship sprint at ChatGenie.PH, one of two applications I shipped solo during that internship (the other is [ChatDaters](https://github.com/Exalt24/ChatDaters)).
+This was built in a compressed three-day internship sprint at ChatGenie.PH. It was one of two applications I shipped solo during that internship (the other is [ChatDaters](https://github.com/Exalt24/ChatDaters)).
